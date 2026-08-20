@@ -60,15 +60,31 @@ const creeperExplosionSound = document.querySelector("#creeperExplosionSound");
 const audioToggle = document.querySelector("#audioToggle");
 const netherSection = document.querySelector("[data-nether-section]");
 const netherNavLink = document.querySelector("[data-nether-nav]");
+const netherGate = document.querySelector("#netherGate");
+const netherPortalButton = document.querySelector("#netherPortalButton");
+const netherPortalAction = document.querySelector("#netherPortalAction");
+const netherAccessLabel = document.querySelector("#netherAccessLabel");
+const netherGateTitle = document.querySelector("#netherGateTitle");
 const netherEnter = document.querySelector("#netherEnter");
+const netherEnterText = document.querySelector("#netherEnterText");
 const netherGateStatus = document.querySelector("#netherGateStatus");
+const netherTransition = document.querySelector("#netherTransition");
+const netherArrival = document.querySelector("#netherArrival");
 const netherMine = document.querySelector("#netherMine");
 const netherPickaxe = document.querySelector("#netherPickaxe");
+const netherPickaxeLabel = document.querySelector("#netherPickaxeLabel");
+const netherOreField = document.querySelector("#netherOreField");
 const netherOreCount = document.querySelector("#netherOreCount");
 const netherStatus = document.querySelector("#netherStatus");
+const netherGoldDiscovery = document.querySelector("#netherGoldDiscovery");
+const netherGoldPickup = document.querySelector("#netherGoldPickup");
 const netherBookReward = document.querySelector("#netherBookReward");
+const netherRewardOverlay = document.querySelector("#netherRewardOverlay");
+const netherRewardDismiss = document.querySelector("#netherRewardDismiss");
 const netherMineReset = document.querySelector("#netherMineReset");
 const relationshipStart = new Date(2025, 1, 20, 20, 0, 0);
+const NETHER_PROGRESS_STORAGE_KEY = "por-siempre-juntos-nether-progress-v2";
+const NETHER_BLOCK_TOTAL = 15;
 const counterFields = {
   years: document.querySelector("#countYears"),
   months: document.querySelector("#countMonths"),
@@ -123,10 +139,13 @@ let triviaIndex = 0;
 let seedsAvailable = 0;
 let plantedFlowerCount = 0;
 let isMusicMuted = false;
-let netherKeyReady = false;
-let netherUnlocked = false;
+let netherProgress = loadNetherProgress();
+let netherKeyReady = netherProgress.creeperKeyObtained;
+let netherUnlocked = netherProgress.netherUnlocked;
 let netherPickaxeSelected = false;
-let minedNetherOreCount = 0;
+let minedNetherOreCount = netherProgress.netherGoldFound ? 1 : 0;
+let netherPortalTimer = null;
+let netherArrivalTimer = null;
 
 const inventoryDetails = {
   "infinite-love": {
@@ -148,6 +167,14 @@ const inventoryDetails = {
   "nether-book": {
     label: "Libro rescatado del Nether",
     message: "Libro del Nether guardado: una aventura nueva ya qued\u00f3 escrita para los dos."
+  },
+  "nether-pickaxe": {
+    label: "Pico del Nether",
+    message: "Pico del Nether guardado: ahora podemos abrirnos camino juntos entre cualquier roca."
+  },
+  "nether-gold": {
+    label: "Oro del Nether",
+    message: "Oro del Nether guardado: mi minerita favorita encontr\u00f3 algo que brillaba para los dos."
   }
 };
 
@@ -428,8 +455,64 @@ function initializeAudio() {
   document.addEventListener("keydown", wakeAmbientMusic, { capture: true });
 }
 
+function getDefaultNetherProgress() {
+  return {
+    creeperKeyObtained: false,
+    netherUnlocked: false,
+    netherPickaxeObtained: false,
+    netherGoldFound: false,
+    netherBookUnlocked: false,
+    netherGoldBlockIndex: null,
+    netherBlockHits: {}
+  };
+}
+
+function loadNetherProgress() {
+  const defaults = getDefaultNetherProgress();
+
+  try {
+    const savedProgress = JSON.parse(window.localStorage.getItem(NETHER_PROGRESS_STORAGE_KEY));
+
+    if (!savedProgress || typeof savedProgress !== "object") {
+      return defaults;
+    }
+
+    return {
+      ...defaults,
+      ...savedProgress,
+      netherGoldBlockIndex: Number.isInteger(savedProgress.netherGoldBlockIndex)
+        ? savedProgress.netherGoldBlockIndex
+        : null,
+      netherBlockHits: savedProgress.netherBlockHits && typeof savedProgress.netherBlockHits === "object"
+        ? savedProgress.netherBlockHits
+        : {}
+    };
+  } catch (error) {
+    return defaults;
+  }
+}
+
+function saveNetherProgress() {
+  try {
+    window.localStorage.setItem(NETHER_PROGRESS_STORAGE_KEY, JSON.stringify(netherProgress));
+  } catch (error) {
+    // The adventure still works when a browser has local storage disabled.
+  }
+}
+
 function getNetherOres() {
   return Array.from(document.querySelectorAll("[data-nether-ore]"));
+}
+
+function getNetherGoldIndex() {
+  const savedIndex = netherProgress.netherGoldBlockIndex;
+
+  if (!Number.isInteger(savedIndex) || savedIndex < 0 || savedIndex >= NETHER_BLOCK_TOTAL) {
+    netherProgress.netherGoldBlockIndex = Math.floor(Math.random() * NETHER_BLOCK_TOTAL);
+    saveNetherProgress();
+  }
+
+  return netherProgress.netherGoldBlockIndex;
 }
 
 function setNetherStatus(message) {
@@ -438,128 +521,501 @@ function setNetherStatus(message) {
   }
 }
 
+function updateNetherQuickInventory() {
+  const itemStates = {
+    key: netherProgress.creeperKeyObtained,
+    pickaxe: netherProgress.netherPickaxeObtained,
+    gold: netherProgress.netherGoldFound,
+    book: netherProgress.netherBookUnlocked
+  };
+
+  document.querySelectorAll("[data-nether-quick-item]").forEach((slot) => {
+    const itemId = slot.dataset.netherQuickItem;
+    slot.classList.toggle("is-collected", Boolean(itemStates[itemId]));
+    slot.classList.toggle("is-used", itemId === "key" && netherProgress.netherUnlocked);
+  });
+}
+
+function restoreNetherProgress() {
+  netherKeyReady = Boolean(netherProgress.creeperKeyObtained);
+  netherUnlocked = Boolean(netherProgress.netherUnlocked);
+  minedNetherOreCount = netherProgress.netherGoldFound ? 1 : 0;
+
+  if (netherProgress.creeperKeyObtained) {
+    unlockInventoryItem("shared-key");
+  }
+
+  if (netherProgress.netherPickaxeObtained) {
+    unlockInventoryItem("nether-pickaxe");
+  }
+
+  if (netherProgress.netherGoldFound) {
+    unlockInventoryItem("nether-gold");
+  }
+
+  if (netherProgress.netherBookUnlocked) {
+    unlockInventoryItem("nether-book");
+  }
+}
+
 function updateNetherAccess() {
   if (!netherSection || !netherEnter) {
     return;
   }
 
+  const portalIsOpen = Boolean(netherProgress.netherUnlocked);
+
   netherSection.classList.toggle("has-key", netherKeyReady);
   netherSection.classList.toggle("is-locked", !netherKeyReady);
-  netherEnter.disabled = !netherKeyReady;
+  netherSection.classList.toggle("is-open", portalIsOpen);
+  netherEnter.classList.toggle("is-disabled", !netherKeyReady);
+  netherEnter.setAttribute("aria-disabled", String(!netherKeyReady));
+
+  if (netherGate) {
+    netherGate.classList.toggle("has-key", netherKeyReady);
+    netherGate.classList.toggle("is-open", portalIsOpen);
+  }
 
   if (netherNavLink) {
     netherNavLink.classList.toggle("is-locked", !netherKeyReady);
     netherNavLink.setAttribute("aria-disabled", String(!netherKeyReady));
   }
 
-  if (netherGateStatus) {
-    netherGateStatus.textContent = netherKeyReady
-      ? "La llave reconoce el portal. Ya podemos abrir el camino juntos."
-      : "Completa la misi\u00f3n del creeper para conseguir la llave de los dos.";
+  if (!netherKeyReady) {
+    if (netherAccessLabel) {
+      netherAccessLabel.textContent = "Portal sellado";
+    }
+    if (netherGateTitle) {
+      netherGateTitle.textContent = "Una pista entre las brasas";
+    }
+    if (netherGateStatus) {
+      netherGateStatus.textContent = "Parece que algo falta... tal vez cierto Creeper tenga la respuesta.";
+    }
+    if (netherEnterText) {
+      netherEnterText.textContent = "Intentar entrar";
+    }
+    if (netherPortalAction) {
+      netherPortalAction.textContent = "Portal bloqueado";
+    }
+    if (netherPortalButton) {
+      netherPortalButton.setAttribute("aria-label", "Portal del Nether bloqueado");
+    }
+  } else if (!portalIsOpen) {
+    if (netherAccessLabel) {
+      netherAccessLabel.textContent = "Llave encontrada";
+    }
+    if (netherGateTitle) {
+      netherGateTitle.textContent = "La llave reconoce el portal";
+    }
+    if (netherGateStatus) {
+      netherGateStatus.textContent = "La llave de los dos ya sabe el camino. Toca el portal para encenderlo juntos.";
+    }
+    if (netherEnterText) {
+      netherEnterText.textContent = "Usar la llave";
+    }
+    if (netherPortalAction) {
+      netherPortalAction.textContent = "Encender portal";
+    }
+    if (netherPortalButton) {
+      netherPortalButton.setAttribute("aria-label", "Usar la llave para encender el portal del Nether");
+    }
+  } else {
+    if (netherAccessLabel) {
+      netherAccessLabel.textContent = "Portal encendido";
+    }
+    if (netherGateTitle) {
+      netherGateTitle.textContent = "El camino ya est\u00e1 abierto";
+    }
+    if (netherGateStatus) {
+      netherGateStatus.textContent = "Las brasas nos dejaron pasar. El siguiente cap\u00edtulo est\u00e1 del otro lado.";
+    }
+    if (netherEnterText) {
+      netherEnterText.textContent = "Cruzar el portal";
+    }
+    if (netherPortalAction) {
+      netherPortalAction.textContent = "Cruzar juntos";
+    }
+    if (netherPortalButton) {
+      netherPortalButton.setAttribute("aria-label", "Cruzar al Nether");
+    }
   }
+
+  updateNetherQuickInventory();
 }
 
 function unlockNetherAccess() {
+  netherProgress.creeperKeyObtained = true;
   netherKeyReady = true;
+  saveNetherProgress();
+  unlockInventoryItem("shared-key");
   updateNetherAccess();
 }
 
-function setNetherPickaxeSelected(isSelected) {
-  netherPickaxeSelected = isSelected;
-
-  if (netherPickaxe) {
-    netherPickaxe.classList.toggle("is-selected", isSelected);
-    netherPickaxe.setAttribute("aria-pressed", String(isSelected));
-  }
-
-  getNetherOres().forEach((ore) => {
-    if (!ore.classList.contains("is-mined")) {
-      ore.disabled = !isSelected;
-    }
-  });
-}
-
-function resetNetherMining() {
-  minedNetherOreCount = 0;
-  setNetherPickaxeSelected(false);
-
-  getNetherOres().forEach((ore, index) => {
-    ore.classList.remove("is-mined");
-    ore.disabled = true;
-    ore.setAttribute("aria-label", "Bloque de oro del Nether " + (index + 1));
-  });
-
-  if (netherOreCount) {
-    netherOreCount.textContent = "0";
-  }
-
-  if (netherBookReward) {
-    netherBookReward.hidden = true;
-  }
-
-  setNetherStatus("Primero toma el pico para empezar a minar.");
-}
-
-function enterNether() {
-  if (!netherKeyReady || !netherSection || !netherMine) {
+function renderNetherMineField() {
+  if (!netherOreField) {
     return;
   }
 
-  netherUnlocked = true;
-  netherSection.classList.add("is-open");
-  netherMine.hidden = false;
-  setNetherStatus("El portal est\u00e1 abierto. Toma el pico y busca el oro entre las brasas.");
-  window.setTimeout(() => netherMine.scrollIntoView({ behavior: "smooth", block: "center" }), 140);
+  const goldIndex = getNetherGoldIndex();
+  const field = document.createDocumentFragment();
+
+  for (let index = 0; index < NETHER_BLOCK_TOTAL; index += 1) {
+    const hits = Number(netherProgress.netherBlockHits[index] || 0);
+    const isGoldBlock = index === goldIndex;
+    const block = document.createElement("button");
+
+    block.className = "nether-ore";
+    block.type = "button";
+    block.dataset.netherOre = String(index);
+    block.dataset.hits = String(hits);
+    block.setAttribute("aria-label", "Roca del Nether " + (index + 1));
+
+    if (hits > 0) {
+      block.classList.add("is-cracked");
+    }
+
+    if (hits >= 2) {
+      block.classList.add("is-broken");
+      block.disabled = true;
+    }
+
+    if (netherProgress.netherGoldFound) {
+      block.disabled = true;
+      block.classList.add("is-finished");
+
+      if (isGoldBlock) {
+        block.classList.remove("is-broken");
+        block.classList.add("is-gold-revealed");
+        block.setAttribute("aria-label", "Oro del Nether recogido");
+      }
+    } else if (isGoldBlock && hits >= 2) {
+      block.classList.add("is-gold-revealed");
+      block.setAttribute("aria-label", "Oro del Nether descubierto");
+    }
+
+    block.addEventListener("click", () => mineNetherOre(block));
+    field.appendChild(block);
+  }
+
+  netherOreField.replaceChildren(field);
+}
+
+function updateNetherMiningUi() {
+  const goldIndex = getNetherGoldIndex();
+  const goldIsRevealed = !netherProgress.netherGoldFound && Number(netherProgress.netherBlockHits[goldIndex] || 0) >= 2;
+
+  if (netherOreCount) {
+    netherOreCount.textContent = netherProgress.netherGoldFound ? "1" : "0";
+  }
+
+  if (netherMine) {
+    netherMine.classList.toggle("has-pickaxe", netherPickaxeSelected);
+    netherMine.classList.toggle("is-complete", netherProgress.netherBookUnlocked);
+  }
+
+  if (netherPickaxe) {
+    netherPickaxe.classList.toggle("is-collected", netherProgress.netherPickaxeObtained);
+    netherPickaxe.classList.toggle("is-selected", netherPickaxeSelected);
+    netherPickaxe.setAttribute("aria-pressed", String(netherPickaxeSelected));
+  }
+
+  if (netherPickaxeLabel) {
+    if (!netherProgress.netherPickaxeObtained) {
+      netherPickaxeLabel.textContent = "Tomar pico";
+    } else if (netherPickaxeSelected) {
+      netherPickaxeLabel.textContent = "Pico equipado";
+    } else {
+      netherPickaxeLabel.textContent = "Equipar pico";
+    }
+  }
+
+  if (netherGoldDiscovery) {
+    netherGoldDiscovery.hidden = !goldIsRevealed;
+  }
+
+  if (netherBookReward) {
+    netherBookReward.hidden = !netherProgress.netherBookUnlocked;
+  }
+
+  renderNetherMineField();
+  updateNetherQuickInventory();
+}
+
+function setNetherPickaxeSelected(isSelected) {
+  netherPickaxeSelected = Boolean(isSelected && netherProgress.netherPickaxeObtained && !netherProgress.netherGoldFound);
+  updateNetherMiningUi();
+}
+
+function takeNetherPickaxe() {
+  if (!netherUnlocked) {
+    return;
+  }
+
+  if (netherProgress.netherGoldFound) {
+    setNetherStatus("La veta ya entreg\u00f3 su tesoro. El libro qued\u00f3 guardado para nuestra siguiente aventura.");
+    return;
+  }
+
+  if (!netherProgress.netherPickaxeObtained) {
+    netherProgress.netherPickaxeObtained = true;
+    saveNetherProgress();
+    unlockInventoryItem("nether-pickaxe");
+    setNetherPickaxeSelected(true);
+    setNetherStatus("Pico listo. Dale dos golpes a cada roca hasta encontrar lo que brilla.");
+    return;
+  }
+
+  setNetherPickaxeSelected(!netherPickaxeSelected);
+  setNetherStatus(netherPickaxeSelected ? "Pico equipado. Ahora la veta puede contarnos su secreto." : "El pico qued\u00f3 guardado en el inventario de expedici\u00f3n.");
+}
+
+function spawnNetherMiningParticles(block, gold) {
+  if (!block) {
+    return;
+  }
+
+  const particleLayer = document.createElement("span");
+  particleLayer.className = "nether-mining-particles" + (gold ? " is-gold" : "");
+
+  for (let index = 0; index < 5; index += 1) {
+    const particle = document.createElement("span");
+    particle.style.setProperty("--particle-x", String((index - 2) * 12) + "px");
+    particle.style.setProperty("--particle-y", String(-12 - (index % 2) * 13) + "px");
+    particleLayer.appendChild(particle);
+  }
+
+  block.appendChild(particleLayer);
+  window.setTimeout(() => particleLayer.remove(), 620);
+}
+
+function revealNetherGold(block) {
+  if (netherProgress.netherGoldFound) {
+    return;
+  }
+
+  block?.classList.add("is-gold-revealed");
+  updateNetherMiningUi();
+  setNetherStatus("Lo encontraste. Ahora toca el oro para guardarlo con nosotros.");
+  playSoundEffect(xpSound, 0.42);
+  spawnSparkleBlocks(6);
+}
+
+function showNetherReward() {
+  if (!netherProgress.netherBookUnlocked) {
+    netherProgress.netherBookUnlocked = true;
+    saveNetherProgress();
+    unlockInventoryItem("nether-book");
+  }
+
+  updateNetherMiningUi();
+  setNetherStatus("Oro encontrado y libro desbloqueado. Esta aventura ya qued\u00f3 escrita.");
+  playSoundEffect(xpSound, 0.52);
+  spawnSparkleBlocks(10);
+
+  if (netherRewardOverlay) {
+    netherRewardOverlay.hidden = false;
+    netherSection?.classList.add("has-reward");
+    window.setTimeout(() => netherRewardDismiss?.focus(), 240);
+  }
+}
+
+function collectNetherGold() {
+  const goldIndex = getNetherGoldIndex();
+
+  if (netherProgress.netherGoldFound || Number(netherProgress.netherBlockHits[goldIndex] || 0) < 2) {
+    return;
+  }
+
+  netherProgress.netherGoldFound = true;
+  netherProgress.netherBookUnlocked = true;
+  minedNetherOreCount = 1;
+  netherPickaxeSelected = false;
+  saveNetherProgress();
+  unlockInventoryItem("nether-gold");
+  unlockInventoryItem("nether-book");
+
+  if (netherGoldDiscovery) {
+    netherGoldDiscovery.classList.add("is-collected");
+  }
+
+  setNetherStatus("El oro salt\u00f3 al inventario. Parece que nos quiere mostrar algo m\u00e1s.");
+  playSoundEffect(xpSound, 0.48);
+  spawnSparkleBlocks(8);
+
+  window.setTimeout(() => {
+    if (netherGoldDiscovery) {
+      netherGoldDiscovery.classList.remove("is-collected");
+      netherGoldDiscovery.hidden = true;
+    }
+    showNetherReward();
+  }, 560);
 }
 
 function mineNetherOre(ore) {
   if (!netherPickaxeSelected) {
-    setNetherStatus("Primero toma el pico para poder minar el oro.");
+    setNetherStatus("Primero toma el pico para poder abrir la roca del Nether.");
     return;
   }
 
-  if (ore.classList.contains("is-mined")) {
+  if (ore.disabled || netherProgress.netherGoldFound) {
     return;
   }
 
-  ore.classList.add("is-mined");
+  const index = Number(ore.dataset.netherOre);
+  const hits = Math.min(Number(netherProgress.netherBlockHits[index] || 0) + 1, 2);
+  const isGoldBlock = index === getNetherGoldIndex();
+
+  netherProgress.netherBlockHits[index] = hits;
+  saveNetherProgress();
+  ore.classList.remove("is-struck");
+  window.requestAnimationFrame(() => ore.classList.add("is-struck"));
+  spawnNetherMiningParticles(ore, isGoldBlock && hits === 2);
+
+  if (hits === 1) {
+    ore.classList.add("is-cracked");
+    ore.setAttribute("aria-label", "Roca del Nether agrietada. Falta un golpe.");
+    setNetherStatus("La roca se agriet\u00f3. Un golpe m\u00e1s puede revelar algo.");
+    return;
+  }
+
+  ore.classList.add("is-broken");
   ore.disabled = true;
-  ore.setAttribute("aria-label", "Bloque de oro extra\u00eddo");
-  minedNetherOreCount += 1;
+  ore.setAttribute("aria-label", isGoldBlock ? "Oro del Nether descubierto" : "Roca del Nether rota");
 
-  if (netherOreCount) {
-    netherOreCount.textContent = String(minedNetherOreCount);
-  }
-
-  spawnSparkleBlocks(2);
-
-  if (minedNetherOreCount === getNetherOres().length) {
-    setNetherPickaxeSelected(false);
-    if (netherBookReward) {
-      netherBookReward.hidden = false;
-    }
-    unlockInventoryItem("nether-book");
-    playSoundEffect(xpSound, 0.52);
-    setNetherStatus("Todo el oro es nuestro. El libro rescatado ya entr\u00f3 al inventario.");
-    spawnSparkleBlocks(10);
+  if (isGoldBlock) {
+    window.setTimeout(() => revealNetherGold(ore), 340);
     return;
   }
 
-  const remaining = getNetherOres().length - minedNetherOreCount;
-  setNetherStatus(remaining === 1 ? "Falta un bloque de oro." : "Faltan " + remaining + " bloques de oro.");
+  setNetherStatus("La roca se rompi\u00f3. Sigue buscando: hay algo escondido entre las brasas.");
+}
+
+function showNetherMission() {
+  if (!netherMine) {
+    return;
+  }
+
+  if (netherArrivalTimer) {
+    window.clearTimeout(netherArrivalTimer);
+  }
+
+  if (netherProgress.netherBookUnlocked) {
+    netherMine.hidden = false;
+    updateNetherMiningUi();
+    setNetherStatus("Misi\u00f3n completada. El oro y el libro siguen guardados en nuestro inventario.");
+    window.setTimeout(() => netherMine.scrollIntoView({ behavior: "smooth", block: "center" }), 120);
+    return;
+  }
+
+  if (netherArrival) {
+    netherArrival.hidden = false;
+  }
+
+  netherSection?.classList.add("is-arriving");
+  netherMine.hidden = true;
+
+  netherArrivalTimer = window.setTimeout(() => {
+    if (netherArrival) {
+      netherArrival.hidden = true;
+    }
+    netherSection?.classList.remove("is-arriving");
+    netherMine.hidden = false;
+    updateNetherMiningUi();
+    setNetherStatus(netherProgress.netherPickaxeObtained ? "El pico ya est\u00e1 contigo. Equ\u00edpalo para seguir minando." : "El pico est\u00e1 esperando junto a la veta.");
+    netherMine.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, 1600);
+}
+
+function showLockedNetherHint() {
+  if (!netherGate) {
+    return;
+  }
+
+  netherGate.classList.remove("is-hinting");
+  void netherGate.offsetWidth;
+  netherGate.classList.add("is-hinting");
+  if (netherGateStatus) {
+    netherGateStatus.textContent = "Parece que algo falta...";
+  }
+
+  window.setTimeout(() => {
+    if (!netherKeyReady && netherGateStatus) {
+      netherGateStatus.textContent = "Tal vez cierto Creeper tenga la respuesta.";
+    }
+    netherGate.classList.remove("is-hinting");
+  }, 1080);
+}
+
+function enterNether() {
+  if (!netherKeyReady) {
+    showLockedNetherHint();
+    return;
+  }
+
+  if (netherProgress.netherUnlocked) {
+    showNetherMission();
+    return;
+  }
+
+  if (!netherSection || !netherGate || netherGate.classList.contains("is-activating")) {
+    return;
+  }
+
+  if (netherPortalTimer) {
+    window.clearTimeout(netherPortalTimer);
+  }
+
+  netherSection.classList.add("is-activating");
+  netherGate.classList.add("is-activating");
+  if (netherGateStatus) {
+    netherGateStatus.textContent = "La llave encuentra su lugar en el portal...";
+  }
+
+  window.setTimeout(() => {
+    if (netherGateStatus) {
+      netherGateStatus.textContent = "Las brasas despiertan y el portal comienza a brillar.";
+    }
+  }, 620);
+
+  netherPortalTimer = window.setTimeout(() => {
+    netherProgress.netherUnlocked = true;
+    netherUnlocked = true;
+    saveNetherProgress();
+    updateNetherAccess();
+    if (netherGateStatus) {
+      netherGateStatus.textContent = "El portal est\u00e1 encendido. Cruzamos juntos.";
+    }
+
+    window.setTimeout(() => {
+      netherSection.classList.remove("is-activating");
+      netherGate.classList.remove("is-activating");
+      showNetherMission();
+    }, 520);
+  }, 1480);
 }
 
 function initializeNether() {
+  restoreNetherProgress();
   updateNetherAccess();
+  renderNetherMineField();
+
+  if (netherProgress.netherBookUnlocked && netherMine) {
+    netherMine.hidden = false;
+    updateNetherMiningUi();
+  }
 
   if (netherNavLink) {
     netherNavLink.addEventListener("click", (event) => {
       if (!netherKeyReady) {
         event.preventDefault();
         netherSection?.scrollIntoView({ behavior: "smooth", block: "start" });
-        setNetherStatus("El portal sigue sellado: primero necesitamos la llave del creeper.");
+        showLockedNetherHint();
       }
     });
+  }
+
+  if (netherPortalButton) {
+    netherPortalButton.addEventListener("click", enterNether);
   }
 
   if (netherEnter) {
@@ -567,23 +1023,26 @@ function initializeNether() {
   }
 
   if (netherPickaxe) {
-    netherPickaxe.addEventListener("click", () => {
-      if (!netherUnlocked) {
-        return;
-      }
+    netherPickaxe.addEventListener("click", takeNetherPickaxe);
+  }
 
-      setNetherPickaxeSelected(!netherPickaxeSelected);
-      setNetherStatus(netherPickaxeSelected ? "Pico listo. Ahora toca cada bloque de oro para extraerlo." : "El pico qued\u00f3 guardado.");
+  if (netherGoldPickup) {
+    netherGoldPickup.addEventListener("click", collectNetherGold);
+  }
+
+  if (netherRewardDismiss) {
+    netherRewardDismiss.addEventListener("click", () => {
+      if (netherRewardOverlay) {
+        netherRewardOverlay.hidden = true;
+      }
+      netherSection?.classList.remove("has-reward");
+      setInventoryMessage("El libro del Nether ya est\u00e1 guardado para nuestro siguiente cap\u00edtulo.");
     });
   }
 
-  getNetherOres().forEach((ore) => ore.addEventListener("click", () => mineNetherOre(ore)));
-
   if (netherMineReset) {
-    netherMineReset.addEventListener("click", resetNetherMining);
+    netherMineReset.hidden = true;
   }
-
-  resetNetherMining();
 }
 
 let introSlideIndex = 0;

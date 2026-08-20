@@ -86,7 +86,7 @@ h3 {
 }
 
 .hero::before {
-  background-image: url("assets/hero-heart-sunset.png");
+  background-image: url("assets/hero-heart-sunset.webp");
   background-position: center;
   background-size: cover;
 }
@@ -535,7 +535,7 @@ h1 {
 
 .garden-band::before {
   z-index: -2;
-  background: url("assets/garden-background.png") center / cover no-repeat;
+  background: url("assets/garden-background.webp") center / cover no-repeat;
 }
 
 .garden-band::after {
@@ -1723,7 +1723,7 @@ body.inventory-drawer-open {
   overflow: hidden;
   padding: 94px 0;
   color: #fffdf4;
-  background: #070c0a url("assets/night-moon.png") center / cover no-repeat;
+  background: #070c0a url("assets/night-moon.webp") center / cover no-repeat;
   isolation: isolate;
 }
 
@@ -2217,7 +2217,7 @@ body.intro-active .audio-toggle {
   background:
     radial-gradient(circle at 50% 46%, rgba(255, 229, 178, 0.4), transparent 24%),
     linear-gradient(90deg, rgba(10, 25, 14, 0.68), rgba(10, 25, 14, 0.2) 58%, rgba(10, 25, 14, 0.36)),
-    url("assets/hero-heart-sunset.png") center / cover no-repeat;
+    url("assets/hero-heart-sunset.webp") center / cover no-repeat;
   opacity: 0;
   transform: scale(0.98);
   pointer-events: none;
@@ -2396,7 +2396,7 @@ body.intro-active .audio-toggle {
 }
 
 .intro-slide--adventure .intro-scene-art {
-  background-image: linear-gradient(90deg, rgba(31, 64, 75, 0.18), rgba(246, 163, 89, 0.2)), url("assets/hero-heart-sunset.png");
+  background-image: linear-gradient(90deg, rgba(31, 64, 75, 0.18), rgba(246, 163, 89, 0.2)), url("assets/hero-heart-sunset.webp");
 }
 
 .intro-slide--adventure .intro-scene-art::after {
@@ -2404,7 +2404,7 @@ body.intro-active .audio-toggle {
 }
 
 .intro-slide--night .intro-scene-art {
-  background-image: url("assets/night-moon.png");
+  background-image: url("assets/night-moon.webp");
 }
 
 .intro-slide--night .intro-scene-art::after {
@@ -2412,7 +2412,7 @@ body.intro-active .audio-toggle {
 }
 
 .intro-slide--final .intro-scene-art {
-  background-image: linear-gradient(115deg, rgba(46, 21, 17, 0.72), rgba(46, 21, 17, 0.16)), url("assets/hero-heart-sunset.png");
+  background-image: linear-gradient(115deg, rgba(46, 21, 17, 0.72), rgba(46, 21, 17, 0.16)), url("assets/hero-heart-sunset.webp");
 }
 
 .intro-slide--final .intro-scene-art::after {

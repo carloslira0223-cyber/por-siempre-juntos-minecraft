@@ -2987,11 +2987,11 @@ body.intro-active .audio-toggle {
 @media (min-width: 701px) {
   .intro-slide:not(.intro-slide--final) {
     display: grid;
-    grid-template-columns: minmax(320px, 540px) minmax(200px, 380px);
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 0.62fr);
     align-items: center;
     justify-content: center;
-    gap: clamp(36px, 7vw, 112px);
-    padding: 82px clamp(36px, 6vw, 92px) 92px;
+    gap: clamp(20px, 4vw, 64px);
+    padding: 82px clamp(24px, 4vw, 72px) 92px;
   }
 
   .intro-book-page {
@@ -3023,20 +3023,21 @@ body.intro-active .audio-toggle {
   }
 
   .intro-character {
-    width: auto;
-    max-width: min(28vw, 340px);
+    width: min(28vw, 340px);
+    max-width: 100%;
     max-height: min(54svh, 500px);
     object-fit: contain;
   }
 
   .intro-character--him,
   .intro-character--her {
-    width: auto;
+    width: min(28vw, 340px);
   }
 
   .intro-couple,
   .intro-adventure-characters {
     width: min(30vw, 340px);
+    max-width: 100%;
   }
 
   .intro-couple-photo {
@@ -3050,6 +3051,7 @@ body.intro-active .audio-toggle {
   .intro-house-art,
   .intro-night-refuge {
     width: min(33vw, 400px);
+    max-width: 100%;
     max-height: min(50svh, 460px);
     object-fit: contain;
   }

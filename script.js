@@ -336,14 +336,25 @@ function playSoundEffect(sound, volume) {
 
 function startAmbientMusic() {
   if (!ambientMusic || isMusicMuted) {
-    return;
+    return Promise.resolve(false);
   }
 
   ambientMusic.volume = 0.18;
-  const playAttempt = ambientMusic.play();
-  if (playAttempt) {
-    playAttempt.catch(() => {});
+  ambientMusic.muted = false;
+
+  try {
+    const playAttempt = ambientMusic.play();
+
+    if (playAttempt) {
+      return playAttempt
+        .then(() => true)
+        .catch(() => false);
+    }
+  } catch (error) {
+    return Promise.resolve(false);
   }
+
+  return Promise.resolve(!ambientMusic.paused);
 }
 
 function setMusicMuted(isMuted) {
@@ -379,16 +390,42 @@ function initializeAudio() {
     audioToggle.addEventListener("click", () => setMusicMuted(!isMusicMuted));
   }
 
-  startAmbientMusic();
+  if (!ambientMusic) {
+    return;
+  }
 
-  const wakeAmbientMusic = () => {
+  ambientMusic.autoplay = true;
+  ambientMusic.preload = "auto";
+  ambientMusic.load();
+
+  const requestAmbientMusic = () => {
     startAmbientMusic();
-    document.removeEventListener("pointerdown", wakeAmbientMusic, true);
-    document.removeEventListener("keydown", wakeAmbientMusic, true);
   };
 
-  document.addEventListener("pointerdown", wakeAmbientMusic, { once: true, capture: true });
-  document.addEventListener("keydown", wakeAmbientMusic, { once: true, capture: true });
+  ambientMusic.addEventListener("canplay", requestAmbientMusic, { once: true });
+  ambientMusic.addEventListener("loadeddata", requestAmbientMusic, { once: true });
+  window.addEventListener("pageshow", requestAmbientMusic);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) {
+      requestAmbientMusic();
+    }
+  });
+
+  requestAmbientMusic();
+
+  const wakeAmbientMusic = () => {
+    startAmbientMusic().then((hasStarted) => {
+      if (hasStarted) {
+        document.removeEventListener("pointerdown", wakeAmbientMusic, true);
+        document.removeEventListener("touchstart", wakeAmbientMusic, true);
+        document.removeEventListener("keydown", wakeAmbientMusic, true);
+      }
+    });
+  };
+
+  document.addEventListener("pointerdown", wakeAmbientMusic, { capture: true });
+  document.addEventListener("touchstart", wakeAmbientMusic, { capture: true, passive: true });
+  document.addEventListener("keydown", wakeAmbientMusic, { capture: true });
 }
 
 function getNetherOres() {

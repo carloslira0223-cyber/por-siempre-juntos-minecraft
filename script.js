@@ -48,7 +48,6 @@ const inventoryScrim = document.querySelector("#inventoryScrim");
 const topbar = document.querySelector(".topbar");
 const navSectionLinks = Array.from(document.querySelectorAll("[data-nav-link]"));
 const introExperience = document.querySelector("#introExperience");
-const introStillTrigger = document.querySelector("#introStillTrigger");
 const introBookTrigger = document.querySelector("#introBookTrigger");
 const introSlides = Array.from(document.querySelectorAll("[data-intro-slide]"));
 const introPrevious = document.querySelector("#introPrevious");
@@ -438,25 +437,12 @@ function setIntroSlide(nextIndex) {
   typeIntroSlide(introSlides[introSlideIndex]);
 }
 
-function revealIntroBook() {
-  if (!introExperience || introExperience.dataset.phase !== "still") {
-    return;
-  }
-
-  introExperience.dataset.phase = "book";
-  startAmbientMusic();
-  window.setTimeout(() => {
-    if (introBookTrigger && introExperience.dataset.phase === "book") {
-      introBookTrigger.focus();
-    }
-  }, 420);
-}
-
 function openIntroStory() {
   if (!introExperience || introExperience.dataset.phase !== "book") {
     return;
   }
 
+  startAmbientMusic();
   introExperience.dataset.phase = "opening";
   window.setTimeout(() => {
     if (!introExperience || introExperience.dataset.phase !== "opening") {
@@ -500,7 +486,7 @@ function finishIntroStory() {
 }
 
 function initializeIntro() {
-  if (!introExperience || !introStillTrigger || !introBookTrigger || introSlides.length === 0) {
+  if (!introExperience || !introBookTrigger || introSlides.length === 0) {
     return;
   }
 
@@ -520,7 +506,6 @@ function initializeIntro() {
 
   setIntroSlide(0);
 
-  introStillTrigger.addEventListener("click", revealIntroBook);
   introBookTrigger.addEventListener("click", openIntroStory);
 
   if (introPrevious) {
@@ -1167,3 +1152,4 @@ initializeGarden();
 initializeNavigation();
 initializeAudio();
 initializeIntro();
+

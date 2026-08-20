@@ -2193,7 +2193,7 @@ body.intro-active .audio-toggle {
   z-index: 120;
   overflow: hidden;
   isolation: isolate;
-  background: #ffffff;
+  background: #172b1d;
   color: #18221a;
   opacity: 1;
   transition: opacity 620ms ease, visibility 620ms ease;
@@ -2208,16 +2208,6 @@ body.intro-active .audio-toggle {
   visibility: hidden;
 }
 
-.intro-still-trigger {
-  position: absolute;
-  z-index: 3;
-  inset: 0;
-  width: 100%;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-}
-
 .intro-book-stage {
   position: absolute;
   inset: 0;
@@ -2225,19 +2215,13 @@ body.intro-active .audio-toggle {
   place-items: center;
   overflow: hidden;
   background:
-    radial-gradient(circle at 50% 48%, rgba(255, 226, 193, 0.52), transparent 24%),
-    #ffffff;
+    radial-gradient(circle at 50% 46%, rgba(255, 229, 178, 0.4), transparent 24%),
+    linear-gradient(90deg, rgba(10, 25, 14, 0.68), rgba(10, 25, 14, 0.2) 58%, rgba(10, 25, 14, 0.36)),
+    url("assets/hero-heart-sunset.png") center / cover no-repeat;
   opacity: 0;
   transform: scale(0.98);
   pointer-events: none;
   transition: opacity 560ms ease, transform 740ms cubic-bezier(0.22, 0.9, 0.24, 1);
-}
-
-.intro-experience[data-phase="book"] .intro-still-trigger,
-.intro-experience[data-phase="opening"] .intro-still-trigger,
-.intro-experience[data-phase="story"] .intro-still-trigger,
-.intro-experience[data-phase="closing"] .intro-still-trigger {
-  display: none;
 }
 
 .intro-experience[data-phase="book"] .intro-book-stage,
@@ -2282,7 +2266,7 @@ body.intro-active .audio-toggle {
 }
 
 .intro-book-trigger img {
-  width: min(224px, 56vw);
+  width: min(248px, 68vw);
   height: auto;
   image-rendering: pixelated;
   animation: intro-book-float 2.9s ease-in-out infinite;
@@ -2999,3 +2983,281 @@ body.intro-active .audio-toggle {
     font-size: 1rem;
   }
 }
+
+@media (min-width: 701px) {
+  .intro-slide:not(.intro-slide--final) {
+    display: grid;
+    grid-template-columns: minmax(320px, 540px) minmax(200px, 380px);
+    align-items: center;
+    justify-content: center;
+    gap: clamp(36px, 7vw, 112px);
+    padding: 82px clamp(36px, 6vw, 92px) 92px;
+  }
+
+  .intro-book-page {
+    position: relative;
+    top: auto;
+    left: auto;
+    grid-column: 1;
+    width: 100%;
+    max-width: 540px;
+    height: min(66svh, 530px);
+    min-height: 390px;
+    transform: none;
+  }
+
+  .intro-character,
+  .intro-couple,
+  .intro-house-art,
+  .intro-adventure-characters,
+  .intro-night-refuge {
+    position: relative;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    grid-column: 2;
+    grid-row: 1;
+    align-self: end;
+    justify-self: center;
+  }
+
+  .intro-character {
+    width: auto;
+    max-width: min(28vw, 340px);
+    max-height: min(54svh, 500px);
+    object-fit: contain;
+  }
+
+  .intro-character--him,
+  .intro-character--her {
+    width: auto;
+  }
+
+  .intro-couple,
+  .intro-adventure-characters {
+    width: min(30vw, 340px);
+  }
+
+  .intro-couple-photo {
+    width: auto;
+    max-width: 100%;
+    max-height: min(54svh, 500px);
+    margin: 0 auto;
+    object-fit: contain;
+  }
+
+  .intro-house-art,
+  .intro-night-refuge {
+    width: min(33vw, 400px);
+    max-height: min(50svh, 460px);
+    object-fit: contain;
+  }
+
+  .intro-night-refuge .intro-house-art {
+    width: 100%;
+    max-height: none;
+  }
+
+  .intro-slide--world .intro-book-page {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
+@media (max-width: 700px) {
+  .topbar {
+    overflow: hidden;
+  }
+
+  .brand {
+    flex: 0 0 auto;
+    max-width: 118px;
+    overflow: hidden;
+    font-size: 0.66rem;
+    text-overflow: ellipsis;
+  }
+
+  .nav-links {
+    min-width: 0;
+    justify-content: flex-start;
+    gap: 3px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-links a {
+    flex: 0 0 auto;
+    padding: 7px 8px;
+    font-size: 0.72rem;
+  }
+
+  .hero-content {
+    padding-top: 106px;
+    padding-bottom: 32px;
+  }
+
+  h1 {
+    max-width: 100%;
+    font-size: 2.2rem;
+    line-height: 1.14;
+  }
+
+  .hero-copy {
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+
+  .intro-book-trigger {
+    gap: 14px;
+    padding: 20px 18px;
+  }
+
+  .intro-book-trigger img {
+    width: min(236px, 68vw);
+  }
+
+  .intro-book-prompt {
+    font-size: 1.18rem;
+  }
+
+  .intro-slide:not(.intro-slide--final) {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) minmax(86px, 19svh);
+    align-items: end;
+    justify-items: center;
+    padding: 54px 18px 76px;
+  }
+
+  .intro-book-page {
+    position: relative;
+    z-index: 3;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    grid-row: 1;
+    align-self: end;
+    width: min(90vw, 390px);
+    height: min(53svh, 470px);
+    min-height: 0;
+    transform: none;
+  }
+
+  .intro-book-page::after {
+    top: 18px;
+    bottom: 18px;
+  }
+
+  .intro-page-copy {
+    padding: 32px 36px 28px;
+  }
+
+  .intro-chapter {
+    margin-bottom: 12px;
+    font-size: 0.62rem;
+  }
+
+  .intro-line {
+    margin-bottom: 12px;
+    font-size: 0.98rem;
+    line-height: 1.38;
+  }
+
+  .intro-line--emphasis {
+    font-size: 1.1rem;
+  }
+
+  .intro-character,
+  .intro-couple,
+  .intro-house-art,
+  .intro-adventure-characters,
+  .intro-night-refuge {
+    position: relative;
+    z-index: 4;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    grid-column: 1;
+    grid-row: 2;
+    align-self: end;
+    justify-self: center;
+  }
+
+  .intro-character {
+    width: auto;
+    max-width: 56vw;
+    max-height: 17svh;
+    object-fit: contain;
+  }
+
+  .intro-character--him,
+  .intro-character--her {
+    width: auto;
+  }
+
+  .intro-couple,
+  .intro-adventure-characters {
+    width: min(52vw, 220px);
+    max-height: 17svh;
+  }
+
+  .intro-couple-photo {
+    width: auto;
+    max-width: 100%;
+    max-height: 17svh;
+    margin: 0 auto;
+    object-fit: contain;
+  }
+
+  .intro-house-art,
+  .intro-night-refuge {
+    width: auto;
+    max-width: 58vw;
+    max-height: 17svh;
+    object-fit: contain;
+  }
+
+  .intro-night-refuge .intro-house-art {
+    width: auto;
+    max-width: 100%;
+    max-height: 17svh;
+  }
+
+  .intro-slide--world .intro-book-page {
+    grid-row: 1 / -1;
+    align-self: center;
+  }
+
+  .intro-controls {
+    bottom: 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .intro-slide:not(.intro-slide--final) {
+    grid-template-rows: minmax(0, 1fr) minmax(76px, 16svh);
+    padding: 46px 14px 68px;
+  }
+
+  .intro-book-page {
+    height: min(52svh, 430px);
+  }
+
+  .intro-page-copy {
+    padding: 27px 33px 23px;
+  }
+
+  .intro-line {
+    margin-bottom: 9px;
+    font-size: 0.91rem;
+  }
+}
+

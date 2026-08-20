@@ -126,9 +126,21 @@ const netherGoldPickup = document.querySelector("#netherGoldPickup");
 const netherBookReward = document.querySelector("#netherBookReward");
 const netherRewardOverlay = document.querySelector("#netherRewardOverlay");
 const netherRewardDismiss = document.querySelector("#netherRewardDismiss");
+const treasureSection = document.querySelector("[data-treasure-section]");
+const treasureChestStage = document.querySelector("#treasureChestStage");
+const treasureChestButton = document.querySelector("#treasureChestButton");
+const treasureChestButtonLabel = document.querySelector("#treasureChestButtonLabel");
+const treasureProgress = document.querySelector("#treasureProgress");
+const treasureChestTitle = document.querySelector("#treasureChestTitle");
+const treasureStatus = document.querySelector("#treasureStatus");
+const treasureOpenButton = document.querySelector("#treasureOpenButton");
+const treasureLetter = document.querySelector("#treasureLetter");
+const treasureLetterCopy = document.querySelector("#treasureLetterCopy");
+const treasureLetterTemplate = document.querySelector("#treasureLetterTemplate");
 const relationshipStart = new Date(2025, 1, 20, 20, 0, 0);
 const NETHER_PROGRESS_STORAGE_KEY = "por-siempre-juntos-nether-progress-v2";
 const MEMORY_FAVORITE_STORAGE_KEY = "por-siempre-juntos-memory-favorite-v1";
+const TREASURE_PROGRESS_STORAGE_KEY = "por-siempre-juntos-treasure-v1";
 const NETHER_BLOCK_TOTAL = 15;
 const counterFields = {
   years: document.querySelector("#countYears"),
@@ -232,6 +244,8 @@ let activeMemoryIndex = 0;
 let favoriteMemoryIndex = null;
 let memoryLightboxLastFocus = null;
 let memoryTouchStart = null;
+let treasureOpened = loadTreasureProgress().opened;
+let treasureLetterObserver = null;
 
 const inventoryDetails = {
   "infinite-love": {
@@ -661,6 +675,246 @@ function unlockInventoryItem(itemId) {
   slot.title = details.label;
   slot.setAttribute("aria-label", details.label);
   setInventoryMessage(details.message);
+  updateTreasureChest();
+}
+
+function loadTreasureProgress() {
+  try {
+    const stored = window.localStorage.getItem(TREASURE_PROGRESS_STORAGE_KEY);
+    if (!stored) {
+      return { opened: false };
+    }
+
+    const parsed = JSON.parse(stored);
+    return { opened: Boolean(parsed && parsed.opened) };
+  } catch (error) {
+    return { opened: false };
+  }
+}
+
+function saveTreasureProgress() {
+  try {
+    window.localStorage.setItem(TREASURE_PROGRESS_STORAGE_KEY, JSON.stringify({ opened: treasureOpened }));
+  } catch (error) {
+    // Reading the letter still works when storage is unavailable.
+  }
+}
+
+function getTreasureRequiredItemIds() {
+  return Object.keys(inventoryDetails);
+}
+
+function getCollectedTreasureItemIds() {
+  return getTreasureRequiredItemIds().filter((itemId) => {
+    const slot = document.querySelector('[data-inventory-item="' + itemId + '"]');
+    return Boolean(slot && slot.classList.contains("is-unlocked"));
+  });
+}
+
+function isTreasureReady() {
+  const requiredItemIds = getTreasureRequiredItemIds();
+  return requiredItemIds.length > 0 && getCollectedTreasureItemIds().length === requiredItemIds.length;
+}
+
+function updateTreasureChest() {
+  if (!treasureSection || !treasureChestStage || !treasureChestButton) {
+    return;
+  }
+
+  const requiredItemIds = getTreasureRequiredItemIds();
+  const collectedItemIds = getCollectedTreasureItemIds();
+  const total = requiredItemIds.length;
+  const collected = collectedItemIds.length;
+  const ready = total > 0 && collected === total;
+  const canReadLetter = ready || treasureOpened;
+
+  treasureSection.classList.toggle("is-complete", canReadLetter);
+  treasureChestStage.classList.toggle("is-ready", ready && !treasureOpened);
+  treasureChestStage.classList.toggle("is-open", treasureOpened);
+
+  if (treasureProgress) {
+    treasureProgress.textContent = treasureOpened
+      ? "Tesoro guardado para los dos"
+      : "Objetos reunidos: " + collected + " / " + total;
+  }
+
+  if (treasureOpenButton) {
+    treasureOpenButton.hidden = !canReadLetter;
+    treasureOpenButton.textContent = treasureOpened ? "VOLVER A LEER LA CARTITA" : "ABRIR COFRE";
+  }
+
+  if (treasureOpened) {
+    if (treasureChestButtonLabel) {
+      treasureChestButtonLabel.textContent = "Carta guardada";
+    }
+    if (treasureChestTitle) {
+      treasureChestTitle.textContent = "Nuestro tesoro ya est\u00e1 abierto";
+    }
+    if (treasureStatus) {
+      treasureStatus.textContent = "La cartita qued\u00f3 guardada aqu\u00ed para que podamos volver a leerla cuando queramos.";
+    }
+    treasureChestButton.setAttribute("aria-label", "Volver a leer la carta final");
+    treasureChestButton.title = "Volver a leer la carta final";
+    return;
+  }
+
+  if (ready) {
+    if (treasureChestButtonLabel) {
+      treasureChestButtonLabel.textContent = "Tesoro desbloqueado";
+    }
+    if (treasureChestTitle) {
+      treasureChestTitle.textContent = "Ya reuniste todo lo que construimos juntos";
+    }
+    if (treasureStatus) {
+      treasureStatus.textContent = "El cofrecito ya est\u00e1 listo. Hay una carta esper\u00e1ndote adentro.";
+    }
+    treasureChestButton.setAttribute("aria-label", "Abrir el cofre de nuestra historia");
+    treasureChestButton.title = "Abrir cofre";
+    return;
+  }
+
+  const missing = Math.max(total - collected, 0);
+  if (treasureChestButtonLabel) {
+    treasureChestButtonLabel.textContent = "Cofre cerrado";
+  }
+  if (treasureChestTitle) {
+    treasureChestTitle.textContent = "Todav\u00eda hay cositas por descubrir";
+  }
+  if (treasureStatus) {
+    treasureStatus.textContent = missing === 1
+      ? "Falta un hallazgo para completar todo nuestro mundo."
+      : "Este cofrecito se abrir\u00e1 cuando completes todo nuestro mundo.";
+  }
+  treasureChestButton.setAttribute("aria-label", "Cofre cerrado: " + collected + " de " + total + " objetos reunidos");
+  treasureChestButton.title = "Cofre cerrado";
+}
+
+function renderTreasureLetter() {
+  if (!treasureLetterCopy || !treasureLetterTemplate) {
+    return;
+  }
+
+  const source = treasureLetterTemplate.content.textContent.trim();
+  const paragraphs = source.split(/\r?\n\s*\r?\n/).map((paragraph) => paragraph.trim()).filter(Boolean);
+  const fragment = document.createDocumentFragment();
+
+  paragraphs.forEach((paragraph, index) => {
+    const element = document.createElement("p");
+    element.className = "treasure-letter-paragraph";
+    if (index === 0) {
+      element.classList.add("treasure-letter-paragraph--title");
+    }
+    if (index === 1) {
+      element.classList.add("treasure-letter-paragraph--salutation");
+    }
+
+    paragraph.split(/\r?\n/).forEach((line, lineIndex) => {
+      if (lineIndex > 0) {
+        element.append(document.createElement("br"));
+      }
+      element.append(document.createTextNode(line.trim()));
+    });
+    fragment.append(element);
+  });
+
+  treasureLetterCopy.replaceChildren(fragment);
+}
+
+function initializeTreasureLetterReveal() {
+  const paragraphs = Array.from(document.querySelectorAll(".treasure-letter-paragraph"));
+  if (paragraphs.length === 0) {
+    return;
+  }
+
+  if (!("IntersectionObserver" in window)) {
+    paragraphs.forEach((paragraph) => paragraph.classList.add("is-visible"));
+    return;
+  }
+
+  treasureLetterObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  paragraphs.forEach((paragraph) => treasureLetterObserver.observe(paragraph));
+}
+
+function revealTreasureLetter(shouldFocus) {
+  if (!treasureLetter) {
+    return;
+  }
+
+  const wasHidden = treasureLetter.hidden;
+  treasureLetter.hidden = false;
+  window.requestAnimationFrame(() => treasureLetter.classList.add("is-revealed"));
+
+  if (shouldFocus) {
+    window.setTimeout(() => {
+      treasureLetter.scrollIntoView({ behavior: "smooth", block: "start" });
+      treasureLetter.focus({ preventScroll: true });
+    }, wasHidden ? 360 : 80);
+  }
+}
+
+function hintTreasureLocked() {
+  if (!treasureChestStage || !treasureStatus) {
+    return;
+  }
+
+  const required = getTreasureRequiredItemIds().length;
+  const collected = getCollectedTreasureItemIds().length;
+  treasureChestStage.classList.remove("is-hinting");
+  void treasureChestStage.offsetWidth;
+  treasureChestStage.classList.add("is-hinting");
+  treasureStatus.textContent = "Todav\u00eda faltan " + Math.max(required - collected, 0) + " cositas por descubrir en nuestra aventura.";
+  window.setTimeout(() => treasureChestStage.classList.remove("is-hinting"), 580);
+}
+
+function openTreasureChest() {
+  if (treasureOpened) {
+    revealTreasureLetter(true);
+    return;
+  }
+
+  if (!isTreasureReady()) {
+    hintTreasureLocked();
+    return;
+  }
+
+  if (!treasureChestStage || treasureChestStage.classList.contains("is-opening")) {
+    return;
+  }
+
+  treasureChestStage.classList.add("is-opening");
+  if (treasureStatus) {
+    treasureStatus.textContent = "El cofre se abre despacito...";
+  }
+  playSoundEffect(xpSound, 0.38);
+  spawnSparkleBlocks(8);
+
+  window.setTimeout(() => {
+    treasureOpened = true;
+    saveTreasureProgress();
+    treasureChestStage.classList.remove("is-opening");
+    updateTreasureChest();
+    revealTreasureLetter(true);
+  }, 620);
+}
+
+function initializeTreasure() {
+  if (!treasureSection) {
+    return;
+  }
+
+  renderTreasureLetter();
+  initializeTreasureLetterReveal();
+  treasureChestButton?.addEventListener("click", openTreasureChest);
+  treasureOpenButton?.addEventListener("click", openTreasureChest);
+  updateTreasureChest();
 }
 
 function initializeInventory() {
@@ -2484,3 +2738,4 @@ initializeMemoryGallery();
 initializeAudio();
 initializeIntro();
 initializeNether();
+initializeTreasure();

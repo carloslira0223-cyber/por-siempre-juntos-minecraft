@@ -5930,3 +5930,657 @@ button,
     transition-duration: 1ms !important;
   }
 }
+
+.treasure-section {
+  position: relative;
+  overflow: clip;
+  padding: 112px 0 128px;
+  color: #fff9e8;
+  background-color: #132116;
+  isolation: isolate;
+}
+
+.treasure-section::before,
+.treasure-section::after {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  content: "";
+  pointer-events: none;
+}
+
+.treasure-section::before {
+  background:
+    repeating-linear-gradient(90deg, rgba(120, 82, 42, 0.11) 0 22px, transparent 22px 44px),
+    repeating-linear-gradient(0deg, rgba(72, 118, 61, 0.13) 0 20px, transparent 20px 40px),
+    #132116;
+}
+
+.treasure-section::after {
+  z-index: -1;
+  opacity: 0.72;
+  background: linear-gradient(0deg, rgba(5, 10, 6, 0.68), transparent 46%, rgba(5, 10, 6, 0.42));
+}
+
+.treasure-inner {
+  width: min(1040px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.treasure-heading {
+  max-width: 670px;
+  margin: 0 auto 34px;
+  text-align: center;
+}
+
+.treasure-eyebrow {
+  color: #f8ce70;
+}
+
+.treasure-heading h2 {
+  max-width: 680px;
+  margin: 0 auto;
+  color: #fffaf0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 4vw, 3.55rem);
+}
+
+.treasure-heading > p:last-child {
+  max-width: 560px;
+  margin: 17px auto 0;
+  color: rgba(255, 249, 232, 0.8);
+  font-size: 1.04rem;
+}
+
+.treasure-chest-stage {
+  position: relative;
+  min-height: 336px;
+  display: grid;
+  grid-template-columns: minmax(240px, 0.72fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(22px, 5vw, 70px);
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 46px);
+  border: 1px solid rgba(255, 230, 154, 0.26);
+  border-radius: 7px;
+  background:
+    linear-gradient(90deg, rgba(12, 25, 15, 0.8), rgba(35, 48, 27, 0.84)),
+    repeating-linear-gradient(90deg, rgba(255, 231, 162, 0.04) 0 10px, transparent 10px 20px);
+  box-shadow: 0 24px 46px rgba(4, 12, 6, 0.28), inset 0 0 0 4px rgba(255, 255, 255, 0.025);
+}
+
+.treasure-chest-stage::before {
+  width: 100%;
+  height: 5px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: "";
+  background: repeating-linear-gradient(90deg, #7d5a34 0 16px, #a67e49 16px 32px);
+}
+
+.treasure-chest-button {
+  min-height: 250px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  border: 0;
+  background: transparent;
+  color: #fff9e8;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.treasure-chest-button:focus-visible,
+.treasure-open-button:focus-visible {
+  outline: 3px solid #ffe493;
+  outline-offset: 5px;
+}
+
+.treasure-chest-art-wrap {
+  width: min(100%, 260px);
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.treasure-chest-art {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 22px 17px rgba(0, 0, 0, 0.44));
+  transition: filter 220ms ease, transform 220ms ease;
+}
+
+.treasure-lock {
+  width: 36px;
+  height: 28px;
+  position: absolute;
+  top: 52%;
+  left: 40%;
+  border: 4px solid #fee593;
+  border-radius: 3px;
+  background: #5d4025;
+  box-shadow: 0 0 0 3px rgba(21, 14, 8, 0.56), 4px 4px 0 rgba(10, 8, 4, 0.44);
+  transform: translate(-50%, -50%);
+  transition: opacity 260ms ease, transform 260ms ease;
+}
+
+.treasure-lock::before {
+  width: 20px;
+  height: 16px;
+  position: absolute;
+  top: -19px;
+  left: 50%;
+  border: 4px solid #fee593;
+  border-bottom: 0;
+  border-radius: 10px 10px 0 0;
+  content: "";
+  transform: translateX(-50%);
+}
+
+.treasure-lock::after {
+  width: 5px;
+  height: 10px;
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  content: "";
+  background: #fee593;
+  transform: translateX(-50%);
+}
+
+.treasure-chest-button-label {
+  color: rgba(255, 249, 232, 0.78);
+  font-family: "Courier New", monospace;
+  font-size: 0.77rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.treasure-chest-copy {
+  max-width: 510px;
+}
+
+.treasure-progress {
+  margin: 0 0 9px;
+  color: #f7d98b;
+  font-family: "Courier New", monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.treasure-chest-copy h3 {
+  margin: 0;
+  color: #fffaf0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.58rem, 2.9vw, 2.3rem);
+}
+
+.treasure-chest-copy > p:not(.treasure-progress) {
+  max-width: 460px;
+  margin: 13px 0 0;
+  color: rgba(255, 249, 232, 0.78);
+}
+
+.treasure-open-button {
+  min-height: 48px;
+  margin-top: 22px;
+  padding: 12px 18px;
+  border: 2px solid #fff0b4;
+  border-radius: 5px;
+  background: #e8aa34;
+  color: #2d1b0d;
+  box-shadow: 4px 4px 0 rgba(4, 10, 5, 0.28);
+  cursor: pointer;
+  font-family: "Courier New", monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+
+.treasure-open-button:hover {
+  background: #f5c24f;
+  box-shadow: 6px 6px 0 rgba(4, 10, 5, 0.24);
+  transform: translate(-2px, -2px);
+}
+
+.treasure-sparkle {
+  width: 7px;
+  height: 7px;
+  position: absolute;
+  z-index: 2;
+  opacity: 0;
+  background: #ffe795;
+  box-shadow: 0 0 0 3px rgba(255, 206, 79, 0.16);
+  pointer-events: none;
+}
+
+.treasure-sparkle-one {
+  top: 20%;
+  left: 18%;
+}
+
+.treasure-sparkle-two {
+  right: 21%;
+  bottom: 22%;
+}
+
+.treasure-sparkle-three {
+  top: 31%;
+  right: 12%;
+}
+
+.treasure-chest-stage.is-ready {
+  border-color: rgba(255, 224, 126, 0.72);
+  box-shadow: 0 24px 46px rgba(4, 12, 6, 0.28), inset 0 0 42px rgba(243, 181, 52, 0.16);
+}
+
+.treasure-chest-stage.is-ready .treasure-lock,
+.treasure-chest-stage.is-open .treasure-lock {
+  opacity: 0;
+  transform: translate(-50%, -58%) scale(0.64);
+}
+
+.treasure-chest-stage.is-ready .treasure-chest-art {
+  filter: drop-shadow(0 0 18px rgba(255, 211, 91, 0.7)) drop-shadow(0 22px 17px rgba(0, 0, 0, 0.44));
+  animation: treasure-ready 2.4s ease-in-out infinite;
+}
+
+.treasure-chest-stage.is-ready .treasure-sparkle,
+.treasure-chest-stage.is-open .treasure-sparkle {
+  animation: treasure-spark 2.3s ease-in-out infinite;
+}
+
+.treasure-chest-stage.is-ready .treasure-sparkle-two,
+.treasure-chest-stage.is-open .treasure-sparkle-two {
+  animation-delay: 480ms;
+}
+
+.treasure-chest-stage.is-ready .treasure-sparkle-three,
+.treasure-chest-stage.is-open .treasure-sparkle-three {
+  animation-delay: 860ms;
+}
+
+.treasure-chest-stage.is-opening .treasure-chest-art {
+  animation: treasure-chest-open 700ms cubic-bezier(0.2, 0.82, 0.28, 1) both;
+}
+
+.treasure-chest-stage.is-hinting .treasure-chest-art-wrap {
+  animation: treasure-locked-hint 560ms ease;
+}
+
+.treasure-chest-stage.is-open .treasure-chest-art {
+  filter: drop-shadow(0 0 20px rgba(255, 216, 109, 0.64)) drop-shadow(0 22px 17px rgba(0, 0, 0, 0.44));
+  transform: translateY(-8px) scale(1.04);
+}
+
+.treasure-chest-stage.is-open .treasure-chest-button-label {
+  color: #ffe493;
+}
+
+.treasure-letter {
+  position: relative;
+  max-width: 990px;
+  margin: 68px auto 0;
+  scroll-margin-top: 28px;
+}
+
+.treasure-letter-book-reveal {
+  width: min(880px, 100%);
+  position: relative;
+  z-index: 0;
+  margin: 0 auto -56px;
+  opacity: 0;
+  transform: translateY(38px) scale(0.92);
+}
+
+.treasure-letter-book-reveal img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  image-rendering: auto;
+  filter: drop-shadow(0 20px 24px rgba(18, 12, 6, 0.28));
+}
+
+.treasure-letter-paper {
+  position: relative;
+  z-index: 1;
+  min-height: 640px;
+  padding: clamp(38px, 6vw, 74px) clamp(22px, 7vw, 86px) clamp(40px, 6vw, 72px);
+  border: 6px solid #8a5c39;
+  border-radius: 5px;
+  color: #362619;
+  background:
+    repeating-linear-gradient(0deg, rgba(121, 84, 47, 0.055) 0 1px, transparent 1px 28px),
+    #fff9e8;
+  box-shadow: 0 28px 45px rgba(4, 11, 5, 0.34), inset 0 0 0 4px rgba(163, 115, 70, 0.22);
+  opacity: 0;
+  transform: translateY(22px);
+}
+
+.treasure-letter-paper::before,
+.treasure-letter-paper::after {
+  position: absolute;
+  pointer-events: none;
+  content: "";
+}
+
+.treasure-letter-paper::before {
+  top: 18px;
+  bottom: 18px;
+  left: 50%;
+  width: 2px;
+  opacity: 0.45;
+  background: #c9a779;
+  transform: translateX(-50%);
+}
+
+.treasure-letter-paper::after {
+  inset: 13px;
+  border: 1px solid rgba(139, 91, 53, 0.22);
+}
+
+.treasure-letter-header,
+.treasure-letter-copy,
+.treasure-finale {
+  position: relative;
+  z-index: 1;
+}
+
+.treasure-letter-header {
+  max-width: 670px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.treasure-letter-header .mission-label {
+  margin: 0 0 10px;
+  color: #a6484c;
+}
+
+.treasure-letter-header h3 {
+  color: #382416;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+}
+
+.treasure-letter-header > p:last-child {
+  margin: 14px auto 0;
+  color: #705846;
+}
+
+.treasure-letter-copy {
+  max-width: 790px;
+  margin: 0 auto;
+}
+
+.treasure-letter-paragraph {
+  margin: 0 0 1.55em;
+  color: #3c2a1e;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1rem, 1.2vw, 1.12rem);
+  line-height: 1.82;
+  break-inside: avoid-column;
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.treasure-letter-paragraph.is-visible {
+  animation: treasure-paragraph-in 520ms ease both;
+}
+
+.treasure-letter-paragraph--title {
+  margin-bottom: 1.25em;
+  color: #9c3e50;
+  font-family: "Courier New", monospace;
+  font-size: clamp(0.94rem, 1.5vw, 1.15rem);
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.treasure-letter-paragraph--salutation {
+  color: #793342;
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  font-style: italic;
+  text-align: center;
+}
+
+.treasure-letter-paragraph br {
+  display: block;
+  height: 0.5em;
+  content: "";
+}
+
+.treasure-finale {
+  max-width: 650px;
+  margin: 54px auto 0;
+  padding-top: 29px;
+  border-top: 1px solid rgba(139, 91, 53, 0.35);
+  text-align: center;
+}
+
+.treasure-finale strong,
+.treasure-finale span,
+.treasure-finale small {
+  display: block;
+}
+
+.treasure-finale strong {
+  color: #a84155;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.45rem, 2.6vw, 2rem);
+}
+
+.treasure-finale span {
+  max-width: 500px;
+  margin: 10px auto 0;
+  color: #563c29;
+}
+
+.treasure-finale small {
+  margin-top: 20px;
+  color: #9c6f4d;
+  font-family: "Courier New", monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.treasure-letter.is-revealed .treasure-letter-book-reveal {
+  animation: treasure-book-rise 760ms cubic-bezier(0.18, 0.84, 0.25, 1) both;
+}
+
+.treasure-letter.is-revealed .treasure-letter-paper {
+  animation: treasure-paper-open 660ms 180ms ease both;
+}
+
+@keyframes treasure-ready {
+  0%,
+  100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-8px) scale(1.035); }
+}
+
+@keyframes treasure-spark {
+  0%,
+  100% { opacity: 0; transform: translateY(7px) scale(0.65); }
+  38% { opacity: 1; }
+  60% { opacity: 0.9; transform: translateY(-10px) scale(1); }
+}
+
+@keyframes treasure-chest-open {
+  0% { transform: translateY(0) scale(1); }
+  42% { transform: translateY(7px) scale(0.95); }
+  100% { transform: translateY(-13px) scale(1.07); }
+}
+
+@keyframes treasure-locked-hint {
+  0%,
+  100% { transform: translateX(0); }
+  26% { transform: translateX(-8px); }
+  52% { transform: translateX(8px); }
+  78% { transform: translateX(-4px); }
+}
+
+@keyframes treasure-book-rise {
+  0% { opacity: 0; transform: translateY(38px) scale(0.92); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes treasure-paper-open {
+  0% { opacity: 0; transform: translateY(22px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes treasure-paragraph-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (min-width: 760px) {
+  .treasure-letter-copy {
+    columns: 2 320px;
+    column-gap: 72px;
+  }
+}
+
+@media (max-width: 700px) {
+  .treasure-section {
+    padding: 72px 0 82px;
+  }
+
+  .treasure-inner {
+    width: min(100% - 24px, 560px);
+  }
+
+  .treasure-heading {
+    margin-bottom: 25px;
+  }
+
+  .treasure-heading > p:last-child {
+    font-size: 0.98rem;
+  }
+
+  .treasure-chest-stage {
+    min-height: 0;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 28px 20px 27px;
+    text-align: center;
+  }
+
+  .treasure-chest-button {
+    min-height: 206px;
+  }
+
+  .treasure-chest-art-wrap {
+    width: min(205px, 70vw);
+  }
+
+  .treasure-chest-copy {
+    max-width: 430px;
+    margin: 0 auto;
+  }
+
+  .treasure-chest-copy > p:not(.treasure-progress) {
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .treasure-open-button {
+    width: min(100%, 292px);
+  }
+
+  .treasure-sparkle-one {
+    top: 15%;
+    left: 14%;
+  }
+
+  .treasure-sparkle-two {
+    right: 13%;
+    bottom: 25%;
+  }
+
+  .treasure-sparkle-three {
+    top: 34%;
+    right: 12%;
+  }
+
+  .treasure-letter {
+    margin-top: 43px;
+    scroll-margin-top: 16px;
+  }
+
+  .treasure-letter-book-reveal {
+    width: calc(100% + 10px);
+    margin: 0 -5px -22px;
+  }
+
+  .treasure-letter-paper {
+    min-height: 0;
+    padding: 37px 21px 43px;
+    border-width: 4px;
+  }
+
+  .treasure-letter-paper::before {
+    display: none;
+  }
+
+  .treasure-letter-paper::after {
+    inset: 8px;
+  }
+
+  .treasure-letter-header {
+    margin-bottom: 31px;
+  }
+
+  .treasure-letter-header > p:last-child {
+    font-size: 0.94rem;
+  }
+
+  .treasure-letter-paragraph {
+    margin-bottom: 1.45em;
+    font-size: 1rem;
+    line-height: 1.78;
+  }
+
+  .treasure-letter-paragraph--title {
+    font-size: 0.92rem;
+  }
+
+  .treasure-letter-paragraph--salutation {
+    font-size: 1.28rem;
+  }
+
+  .treasure-finale {
+    margin-top: 42px;
+    padding-top: 24px;
+  }
+
+  .treasure-finale small {
+    font-size: 0.66rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .treasure-section *,
+  .treasure-section *::before,
+  .treasure-section *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}

@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>1 a&ntilde;o y 6 meses contigo</title>
+    <meta
+      name="description"
+      content="Una p&aacute;gina de aniversario inspirada en mundos de cubitos, hecha con amor."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="intro-active">
+    <section
+      class="intro-experience"
+      id="introExperience"
+      data-phase="still"
+      aria-label="Introducci&oacute;n a nuestra historia"
+    >
+      <button
+        class="intro-still-trigger"
+        id="introStillTrigger"
+        type="button"
+        aria-label="Iniciar nuestra historia"
+      ></button>
+
+      <div class="intro-book-stage" aria-live="polite">
+        <div class="intro-book-glow" aria-hidden="true"></div>
+        <button class="intro-book-trigger" id="introBookTrigger" type="button" aria-label="Abrir nuestro libro">
+          <img class="intro-gift-book" src="assets/intro/book-gift-clean.png" alt="Nuestro libro inspirado en Minecraft" />
+          <span class="intro-book-prompt">&Aacute;breme <span aria-hidden="true">&#128151;</span></span>
+        </button>
+      </div>
+
+      <div class="intro-story" id="introStory" aria-live="polite">
+        <div class="intro-ambient" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+
+        <article class="intro-slide intro-slide--world is-active" data-intro-slide aria-hidden="false">
+          <div class="intro-scene-art" aria-hidden="true"></div>
+          <div class="intro-book-page">
+            <img src="assets/intro/intro-book-page.png" alt="" aria-hidden="true" />
+            <div class="intro-page-copy">
+              <p class="intro-chapter">Cap&iacute;tulo 01</p>
+              <p class="intro-line" style="--line-delay: 80ms">Hab&iacute;a una vez un mundo tranquilo&hellip;</p>
+              <p class="intro-line" style="--line-delay: 460ms">Un lugar bonito, pero todav&iacute;a incompleto&hellip;</p>
+              <p class="intro-line" style="--line-delay: 840ms">Como si estuviera esperando que comenzara algo especial.</p>
+            </div>
+          </div>
+          <img class="intro-pixel-landscape" src="assets/intro/intro-world.png" alt="" aria-hidden="true" />
+        </article>
+
+        <article class="intro-slide intro-slide--him" data-intro-slide aria-hidden="true">
+          <div class="intro-scene-art" aria-hidden="true"></div>
+          <img class="intro-character intro-character--him" src="assets/intro/intro-him-clean.png" alt="" aria-hidden="true" />
+          <div class="intro-book-page">
+            <img src="assets/intro/intro-book-page.png" alt="" aria-hidden="true" />
+            <div class="intro-page-copy">
+              <p class="intro-chapter">Cap&iacute;tulo 02</p>
+              <p class="intro-line" style="--line-delay: 80ms">Entonces apareci&oacute; un ni&ntilde;o&hellip;</p>
+              <p class="intro-line" style="--line-delay: 460ms">Un ni&ntilde;o con ganas de construir.</p>
+              <p class="intro-line" style="--line-delay: 840ms">Todav&iacute;a no sab&iacute;a que estaba a punto de vivir la aventura m&aacute;s bonita de su vida.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="intro-slide intro-slide--her" data-intro-slide aria-hidden="true">
+          <div class="intro-scene-art" aria-hidden="true"></div>
+          <img class="intro-character intro-character--her" src="assets/intro/intro-her-clean.png" alt="" aria-hidden="true" />
+          <div class="intro-book-page">
+            <img src="assets/intro/intro-book-page.png" alt="" aria-hidden="true" />
+            <div class="intro-page-copy">
+              <p class="intro-chapter">Cap&iacute;tulo 03</p>
+              <p class="intro-line" style="--line-delay: 80ms">Y entonces&hellip; apareciste t&uacute;.</p>
+              <p class="intro-line" style="--line-delay: 460ms">La ni&ntilde;a m&aacute;s hermosa.</p>
+              <p class="intro-line" style="--line-delay: 840ms">La persona que transform&oacute; un simple mundo en nuestro lugar favorito.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="intro-slide intro-slide--together" data-intro-slide aria-hidden="true">
+          <div class="intro-scene-art" aria-hidden="true"></div>
+          <div class="intro-couple" aria-hidden="true">
+            <img class="intro-couple-photo" src="assets/intro/intro-couple-clean.png" alt="" />
+          </div>
+          <div class="intro-book-page">
+            <img src="assets/intro/intro-book-page.png" alt="" aria-hidden="true" />
+            <div class="intro-page-copy">
+              <p class="intro-chapter">Cap&iacute;tulo 04</p>
+              <p class="intro-line" style="--line-delay: 80ms">Y desde ese momento, todo cambi&oacute;.</p>
+              <p class="intro-line" style="--line-delay: 460ms">Ya no era solo un mundo&hellip;</p>
+              <p class="intro-line intro-line--emphasis" style="--line-delay: 840ms">Ahora era nuestro mundo.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="intro-slide intro-slide--house" data-intro-slide aria-hidden="true">
+          <div class="intro-scene-art" aria-hidden="true"></div>
+          <img class="intro-house-art" src="assets/intro/intro-house-final.png" alt="" aria-hidden="true" />
+          <div class="intro-book-page">
+            <img src="assets/intro/intro-book-page.png" alt="" aria-hidden="true" />
+            <div class="intro-page-copy">
+              <p class="intro-chapter">Cap&iacute;tulo 05</p>
+              <p class="intro-line" style="--line-delay: 80ms">Construimos nuestra casita&hellip;</p>
+              <p class="intro-line" style="--line-delay: 460ms">Un rinconcito lleno de cari&ntilde;o, risas y recuerdos.</p>
+              <p class="intro-line" style="--line-delay: 840ms">No era la casa m&aacute;s grande del mundo, pero para m&iacute; era perfecta porque estabas t&uacute;.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="intro-slide intro-slide--adventure" data-intro-slide aria-hidden="true">
+          <div class="intro-scene-art" aria-hidden="true"></div>
+          <div class="intro-adventure-characters" aria-hidden="true">
+            <img class="intro-couple-photo intro-couple-photo--adventure" src="assets/intro/intro-couple-clean.png" alt="" />
+          </div>
+          <div class="intro-book-page">
+            <img src="assets/intro/intro-book-page.png" alt="" aria-hidden="true" />
+            <div class="intro-page-copy">
+              <p class="intro-chapter">Cap&iacute;tulo 06</p>
+              <p class="intro-line" style="--line-delay: 80ms">Vivimos aventuras y descubrimos caminos.</p>
+              <p class="intro-line" style="--line-delay: 460ms">Compartimos risas y llenamos cada rinc&oacute;n con pedacitos de nosotros.</p>
+              <p class="intro-line" style="--line-delay: 840ms">Porque lo m&aacute;s valioso nunca fueron los bloques, sino cada momento que viv&iacute; contigo.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="intro-slide intro-slide--night" data-intro-slide aria-hidden="true">
+          <div class="intro-scene-art" aria-hidden="true"></div>
+          <div class="intro-night-refuge" aria-hidden="true">
+            <img class="intro-house-art" src="assets/intro/intro-house-final.png" alt="" />
+            <div class="intro-night-lamp"></div>
+          </div>
+          <div class="intro-book-page">
+            <img src="assets/intro/intro-book-page.png" alt="" aria-hidden="true" />
+            <div class="intro-page-copy">
+              <p class="intro-chapter">Cap&iacute;tulo 07</p>
+              <p class="intro-line" style="--line-delay: 80ms">Y aunque a veces llegaron noches oscuras&hellip;</p>
+              <p class="intro-line" style="--line-delay: 460ms">Nunca dejamos de seguir construyendo.</p>
+              <p class="intro-line intro-line--emphasis" style="--line-delay: 840ms">Porque contigo, cualquier lugar se convierte en hogar.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="intro-slide intro-slide--final" data-intro-slide aria-hidden="true">
+          <div class="intro-scene-art" aria-hidden="true"></div>
+          <div class="intro-final-book" aria-hidden="true">
+            <img class="intro-gift-book" src="assets/intro/book-gift-clean.png" alt="" />
+          </div>
+          <div class="intro-final-copy">
+            <p class="intro-chapter">Cap&iacute;tulo 08</p>
+            <p class="intro-continuara">Esta historia continuar&aacute;&hellip;</p>
+            <h2>Y aunque este mundo haya comenzado en Minecraft, nuestras infinitas aventuras apenas empiezan&hellip; porque por siempre estaremos juntos, mi ni&ntilde;a hermosa.</h2>
+            <button class="intro-enter" id="introEnter" type="button">Entrar a nuestra historia <span aria-hidden="true">&#9829;</span></button>
+          </div>
+        </article>
+
+        <div class="intro-controls" aria-label="Controles de la historia">
+          <button class="intro-arrow" id="introPrevious" type="button" aria-label="P&aacute;gina anterior" title="P&aacute;gina anterior">&larr;</button>
+          <p id="introProgress">Cap&iacute;tulo 1 de 8</p>
+          <button class="intro-arrow" id="introNext" type="button" aria-label="P&aacute;gina siguiente" title="P&aacute;gina siguiente">&rarr;</button>
+        </div>
+      </div>
+    </section>
+
+    <audio id="ambientMusic" loop preload="auto">
+      <source src="assets/audio/minecraft-ambient.mp4" type="audio/mp4" />
+    </audio>
+    <audio id="xpSound" preload="auto">
+      <source src="assets/audio/minecraft-xp.mp4" type="audio/mp4" />
+    </audio>
+    <audio id="creeperExplosionSound" preload="auto">
+      <source src="assets/audio/creeper-explosion.mp4" type="audio/mp4" />
+    </audio>
+
+    <nav class="topbar" aria-label="Secciones de la p&aacute;gina">
+      <a class="brand" data-nav-link href="#inicio" aria-label="Volver al inicio">
+        <span class="brand-mark" aria-hidden="true"></span>
+        Nuestro mundo
+      </a>
+      <div class="nav-links">
+        <a data-nav-link href="#jardin">Jard&iacute;n</a>
+        <a data-nav-link href="#juegos">Juegos</a>
+        <a data-nav-link href="#recuerdos">Recuerdos</a>
+        <a data-nav-link href="#noche">Noche</a>
+        <a data-nav-link href="#carta">Carta</a>
+      </div>
+    </nav>
+
+    <header class="hero" id="inicio">
+      <div class="hero-content">
+        <p class="eyebrow">Por siempre juntos, mi ni&ntilde;a hermosa</p>
+        <h1>1 a&ntilde;o y 6 meses cultivando nuestro mundo</h1>
+        <p class="hero-copy">
+          Para mi ni&ntilde;a hermosa: contigo hasta el d&iacute;a m&aacute;s simple se siente
+          como encontrar un bioma nuevo. Hoy empieza en nuestro jard&iacute;n, con
+          todo lo bonito que todav&iacute;a vamos a seguir construyendo.
+        </p>
+        <div class="hero-actions" aria-label="Acciones principales">
+          <a class="button primary" href="#jardin">Entrar al jard&iacute;n</a>
+          <a class="button ghost" href="#recuerdos">Ver recuerdos</a>
+        </div>
+      </div>
+
+      <div class="relationship-counter" aria-label="Tiempo que llevan juntos">
+        <div class="counter-copy">
+          <span>Juntos desde</span>
+          <strong>20 de febrero de 2025</strong>
+          <small>8:00 p. m.</small>
+        </div>
+        <div class="counter-units" aria-live="polite" aria-label="Contador de tiempo juntos">
+          <div class="counter-unit">
+            <strong id="countYears">0</strong>
+            <span>a&ntilde;os</span>
+          </div>
+          <div class="counter-unit">
+            <strong id="countMonths">0</strong>
+            <span>meses</span>
+          </div>
+          <div class="counter-unit">
+            <strong id="countDays">0</strong>
+            <span>d&iacute;as</span>
+          </div>
+          <div class="counter-unit">
+            <strong id="countHours">0</strong>
+            <span>horas</span>
+          </div>
+          <div class="counter-unit">
+            <strong id="countMinutes">0</strong>
+            <span>minutos</span>
+          </div>
+          <div class="counter-unit">
+            <strong id="countSeconds">0</strong>
+            <span>segundos</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <aside class="inventory-drawer" id="inventoryDrawer" role="dialog" aria-modal="true" aria-labelledby="inventory-title" aria-hidden="true" inert>
+      <div class="inventory-drawer-header">
+        <div>
+          <p class="mission-label">Inventario compartido</p>
+          <h2 id="inventory-title">Nuestros hallazgos</h2>
+        </div>
+        <button class="inventory-close" id="inventoryClose" type="button" aria-label="Cerrar inventario" title="Cerrar inventario">&times;</button>
+      </div>
+      <div class="inventory-ui-frame" aria-label="Inventario de los dos">
+        <img class="inventory-ui-art" src="assets/inventory-ui.png" alt="" aria-hidden="true" />
+        <div class="inventory-grid inventory-grid-overlay">
+          <button
+            class="inventory-slot"
+            type="button"
+            disabled
+            data-inventory-item="flower-seeds"
+            aria-label="Semillas de flores bloqueadas"
+          >
+            <img src="assets/garden/flower-seeds.png" alt="" />
+            <span class="inventory-count" id="inventorySeedCount" aria-hidden="true">0</span>
+            <span class="inventory-lock" aria-hidden="true"></span>
+          </button>
+          <button
+            class="inventory-slot"
+            type="button"
+            disabled
+            data-inventory-item="infinite-love"
+            aria-label="Amor infinito bloqueado"
+          >
+            <img src="assets/heart-pixel.png" alt="" />
+            <span class="inventory-count" aria-hidden="true">&infin;</span>
+            <span class="inventory-lock" aria-hidden="true"></span>
+          </button>
+          <button
+            class="inventory-slot"
+            type="button"
+            disabled
+            data-inventory-item="shared-key"
+            aria-label="Llave de los dos bloqueada"
+          >
+            <img src="assets/escape-key.png" alt="" />
+            <span class="inventory-count" aria-hidden="true">2</span>
+            <span class="inventory-lock" aria-hidden="true"></span>
+          </button>
+          <button
+            class="inventory-slot inventory-water-slot"
+            type="button"
+            disabled
+            data-inventory-item="water-bucket"
+            aria-label="Cubo de agua bloqueado"
+          >
+            <img class="water-bucket" src="assets/water-bucket.png" alt="" />
+            <span class="inventory-count" aria-hidden="true">1</span>
+            <span class="inventory-lock" aria-hidden="true"></span>
+          </button>
+          <span class="inventory-empty-slot" aria-hidden="true"></span>
+          <span class="inventory-empty-slot" aria-hidden="true"></span>
+          <span class="inventory-empty-slot" aria-hidden="true"></span>
+          <span class="inventory-empty-slot" aria-hidden="true"></span>
+          <span class="inventory-empty-slot" aria-hidden="true"></span>
+        </div>
+      </div>
+      <p class="inventory-drawer-message" id="inventoryMessage" aria-live="polite">Completen las misiones para llenarlo de cosas bonitas.</p>
+    </aside>
+
+    <button class="inventory-scrim" id="inventoryScrim" type="button" aria-label="Cerrar inventario" aria-hidden="true" tabindex="-1" inert></button>
+
+    <button class="inventory-toggle" id="inventoryToggle" type="button" aria-controls="inventoryDrawer" aria-expanded="false" aria-label="Abrir inventario" title="Abrir inventario">
+      <span class="inventory-toggle-icon" aria-hidden="true"></span>
+    </button>
+
+    <button class="audio-toggle" id="audioToggle" type="button" aria-pressed="false" aria-label="Silenciar m&uacute;sica" title="Silenciar m&uacute;sica">
+      <span class="audio-toggle-mark" aria-hidden="true">&#9835;</span>
+    </button>
+
+    <main>
+      <section class="section intro-section" aria-labelledby="intro-title">
+        <div class="section-heading">
+          <p class="eyebrow dark">Modo aventura activado</p>
+          <h2 id="intro-title">Lo que hemos construido</h2>
+        </div>
+        <div class="intro-grid">
+          <article class="stat-card">
+            <span class="block-icon grass" aria-hidden="true"></span>
+            <h3>Una base</h3>
+            <p>Ese lugar donde todo se siente tranquilo porque est&aacute;s t&uacute;.</p>
+          </article>
+          <article class="stat-card">
+            <span class="block-icon glow" aria-hidden="true"></span>
+            <h3>Luz propia</h3>
+            <p>La forma en la que haces que hasta un d&iacute;a simple valga oro.</p>
+          </article>
+          <article class="stat-card">
+            <span class="block-icon heart" aria-hidden="true"></span>
+            <h3>Un monumento</h3>
+            <p>Uno que no cabe en cubitos: todo lo que siento por ti.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section world-section" aria-labelledby="world-title">
+        <div class="world-copy">
+          <p class="eyebrow dark">Nuestro mapa</p>
+          <h2 id="world-title">Un mundo hecho bloque por bloque</h2>
+          <p>
+            Me gusta pensar que lo nuestro se parece a construir en creativo:
+            primero una idea, luego paciencia, risa, detalle, y de pronto ya
+            hay una casa enorme hecha de momentos que solo entendemos t&uacute; y yo.
+          </p>
+        </div>
+        <div class="terrain-board" aria-label="Coraz&oacute;n hecho con bloques">
+          <span class="tile tree"></span>
+          <span class="tile grass"></span>
+          <span class="tile flower"></span>
+          <span class="tile stone"></span>
+          <span class="tile water"></span>
+          <span class="tile grass"></span>
+          <span class="tile glow"></span>
+          <span class="tile heart"></span>
+          <span class="tile glow"></span>
+          <span class="tile grass"></span>
+          <span class="tile flower"></span>
+          <span class="tile stone"></span>
+          <span class="tile grass"></span>
+          <span class="tile tree"></span>
+          <span class="tile flower"></span>
+          <span class="tile water"></span>
+        </div>
+      </section>
+
+      <section class="garden-band" id="jardin" aria-labelledby="garden-title">
+        <div class="section garden-section">
+          <div class="section-heading garden-heading">
+            <p class="eyebrow dark">Cap&iacute;tulo 01: El d&iacute;a florece</p>
+            <h2 id="garden-title">Cinco recuerdos hacen florecer nuestro jard&iacute;n</h2>
+            <p>
+              Empieza por lo que solo nosotros sabemos. Cada respuesta verdadera
+              deja una semilla para nuestro rinc&oacute;n favorito.
+            </p>
+          </div>
+
+          <div class="garden-play-grid">
+            <article class="garden-panel garden-quiz" aria-labelledby="trivia-title">
+              <div class="garden-panel-heading">
+                <div>
+                  <p class="mission-label">Semillas de memoria</p>
+                  <h3 id="trivia-title">La trivia de nosotros</h3>
+                </div>
+                <span class="quiz-progress" id="triviaProgress" aria-live="polite">0 / 5</span>
+              </div>
+              <p class="trivia-question" id="triviaQuestion"></p>
+              <div class="trivia-choices" id="triviaChoices"></div>
+              <p class="garden-status" id="triviaStatus" aria-live="polite"></p>
+            </article>
+
+            <article class="garden-panel flower-planting" aria-labelledby="planting-title">
+              <div class="garden-panel-heading">
+                <div>
+                  <p class="mission-label">Rinc&oacute;n secreto</p>
+                  <h3 id="planting-title">Nuestro jard&iacute;n en flor</h3>
+                </div>
+                <p class="seed-ledger">En inventario <strong><span id="seedCount">0</span> / 5</strong></p>
+              </div>
+              <div class="garden-beds" id="gardenBeds" aria-label="Parcelas de flores">
+                <button class="flower-bed" type="button" disabled data-flower-bed="0" aria-label="Parcela de tulip&aacute;n bloqueada">
+                  <span class="soil-tile" aria-hidden="true"></span>
+                  <img src="assets/garden/flower-tulip.png" alt="" />
+                </button>
+                <button class="flower-bed" type="button" disabled data-flower-bed="1" aria-label="Parcela de rosa bloqueada">
+                  <span class="soil-tile" aria-hidden="true"></span>
+                  <img src="assets/garden/flower-rose.png" alt="" />
+                </button>
+                <button class="flower-bed" type="button" disabled data-flower-bed="2" aria-label="Parcela de flor naranja bloqueada">
+                  <span class="soil-tile" aria-hidden="true"></span>
+                  <img src="assets/garden/flower-orange.png" alt="" />
+                </button>
+                <button class="flower-bed" type="button" disabled data-flower-bed="3" aria-label="Parcela de flor amarilla bloqueada">
+                  <span class="soil-tile" aria-hidden="true"></span>
+                  <img src="assets/garden/flower-yellow.png" alt="" />
+                </button>
+                <button class="flower-bed" type="button" disabled data-flower-bed="4" aria-label="Parcela de flor azul bloqueada">
+                  <span class="soil-tile" aria-hidden="true"></span>
+                  <img src="assets/garden/flower-blue.png" alt="" />
+                </button>
+              </div>
+              <div class="water-reward" id="waterReward" hidden>
+                <img class="water-bucket" src="assets/water-bucket.png" alt="" />
+                <div>
+                  <strong>El jard&iacute;n te regal&oacute; agua</strong>
+                  <span>Un cubo para que lo que construyamos siga creciendo.</span>
+                </div>
+              </div>
+              <p class="garden-status" id="gardenStatus" aria-live="polite">A&uacute;n faltan cinco semillas para que el jard&iacute;n despierte.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="games-band" id="juegos" aria-labelledby="games-title">
+        <div class="section games-section">
+          <div class="section-heading games-heading">
+            <p class="eyebrow dark">Misiones para dos</p>
+            <h2 id="games-title">Dos retos, una misma aventura</h2>
+            <p>Completen las misiones para descubrir lo que este mundo guarda para ustedes.</p>
+          </div>
+
+          <div class="game-grid">
+            <article class="game-panel craft-game" data-game-panel="craft">
+              <div class="game-panel-heading">
+                <div>
+                  <p class="mission-label">Misi&oacute;n 01</p>
+                  <h3>La receta de nosotros</h3>
+                </div>
+                <button class="restart-button" type="button" data-reset-game="craft">Reiniciar</button>
+              </div>
+              <p class="game-copy">Dos tortuguitas, un coraz&oacute;n y una receta que solo sale cuando estamos juntos.</p>
+
+              <div class="game-layout">
+                <div class="item-shelf craft-shelf" aria-label="Ingredientes de la receta">
+                  <button
+                    class="game-item"
+                    type="button"
+                    draggable="false"
+                    data-item="turtle-left"
+                    data-game="craft"
+                    data-kind="turtle-left"
+                    aria-label="Primera tortuguita"
+                  >
+                    <img src="assets/turtle.png" alt="" />
+                    <span>T&uacute;</span>
+                  </button>
+                  <button
+                    class="game-item"
+                    type="button"
+                    draggable="false"
+                    data-item="heart"
+                    data-game="craft"
+                    data-kind="heart"
+                    aria-label="Coraz&oacute;n"
+                  >
+                    <img src="assets/heart-pixel.png" alt="" />
+                    <span>Amor</span>
+                  </button>
+                  <button
+                    class="game-item"
+                    type="button"
+                    draggable="false"
+                    data-item="turtle-right"
+                    data-game="craft"
+                    data-kind="turtle-right"
+                    aria-label="Segunda tortuguita"
+                  >
+                    <img src="assets/turtle.png" alt="" />
+                    <span>Yo</span>
+                  </button>
+                </div>
+
+                <div class="craft-stage">
+                  <div class="craft-board" aria-label="Mesa de crafting">
+                    <img src="assets/crafting-table.png" alt="Mesa de crafting" />
+                    <div class="craft-slots">
+                      <button
+                        class="drop-slot craft-slot slot-turtle-left"
+                        type="button"
+                        data-game-slot="craft"
+                        data-accept="turtle-left"
+                        aria-label="Espacio para la primera tortuguita"
+                      ></button>
+                      <button
+                        class="drop-slot craft-slot slot-heart"
+                        type="button"
+                        data-game-slot="craft"
+                        data-accept="heart"
+                        aria-label="Espacio para el coraz&oacute;n"
+                      ></button>
+                      <button
+                        class="drop-slot craft-slot slot-turtle-right"
+                        type="button"
+                        data-game-slot="craft"
+                        data-accept="turtle-right"
+                        aria-label="Espacio para la segunda tortuguita"
+                      ></button>
+                    </div>
+                  </div>
+                  <div class="game-result" id="craftResult" hidden>
+                    <img src="assets/heart-pixel.png" alt="" />
+                    <div>
+                      <strong>Receta completada</strong>
+                      <span>T&uacute; + amor + yo = nuestro hogar.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <p class="game-status" id="craftStatus" aria-live="polite">La receta espera tres ingredientes.</p>
+            </article>
+
+            <article class="game-panel creeper-game" data-game-panel="creeper">
+              <div class="game-panel-heading">
+                <div>
+                  <p class="mission-label">Misi&oacute;n 02</p>
+                  <h3>La llave para escapar</h3>
+                </div>
+                <button class="restart-button" type="button" data-reset-game="creeper">Reiniciar</button>
+              </div>
+              <p class="game-copy">Llena al creeper con bloques y haz que suelte la llave de nuestra pr&oacute;xima escapada.</p>
+
+              <div class="game-layout creeper-layout">
+                <div class="item-shelf block-shelf" aria-label="Bloques para el creeper">
+                  <button
+                    class="game-item block-item block-one"
+                    type="button"
+                    draggable="false"
+                    data-item="block-1"
+                    data-game="creeper"
+                    data-kind="block"
+                    aria-label="Bloque de piedra"
+                  >
+                    <img src="assets/blocks.png" alt="" />
+                    <span>Piedra</span>
+                  </button>
+                  <button
+                    class="game-item block-item block-two"
+                    type="button"
+                    draggable="false"
+                    data-item="block-2"
+                    data-game="creeper"
+                    data-kind="block"
+                    aria-label="Bloque de arena"
+                  >
+                    <img src="assets/blocks.png" alt="" />
+                    <span>Arena</span>
+                  </button>
+                  <button
+                    class="game-item block-item block-three"
+                    type="button"
+                    draggable="false"
+                    data-item="block-3"
+                    data-game="creeper"
+                    data-kind="block"
+                    aria-label="Bloque de pasto"
+                  >
+                    <img src="assets/blocks.png" alt="" />
+                    <span>Pasto</span>
+                  </button>
+                  <button
+                    class="game-item block-item block-four"
+                    type="button"
+                    draggable="false"
+                    data-item="block-4"
+                    data-game="creeper"
+                    data-kind="block"
+                    aria-label="Bloque de tierra"
+                  >
+                    <img src="assets/blocks.png" alt="" />
+                    <span>Tierra</span>
+                  </button>
+                </div>
+
+                <div class="creeper-stage">
+                  <div class="creeper-frame" aria-label="Creeper para llenar con bloques">
+                    <img class="creeper-portrait" src="assets/creeper.png" alt="Creeper" />
+                    <div class="creeper-slots">
+                      <button
+                        class="drop-slot creeper-slot creeper-slot-one"
+                        type="button"
+                        data-game-slot="creeper"
+                        data-accept="block"
+                        aria-label="Primer espacio de bloque"
+                      ></button>
+                      <button
+                        class="drop-slot creeper-slot creeper-slot-two"
+                        type="button"
+                        data-game-slot="creeper"
+                        data-accept="block"
+                        aria-label="Segundo espacio de bloque"
+                      ></button>
+                      <button
+                        class="drop-slot creeper-slot creeper-slot-three"
+                        type="button"
+                        data-game-slot="creeper"
+                        data-accept="block"
+                        aria-label="Tercer espacio de bloque"
+                      ></button>
+                      <button
+                        class="drop-slot creeper-slot creeper-slot-four"
+                        type="button"
+                        data-game-slot="creeper"
+                        data-accept="block"
+                        aria-label="Cuarto espacio de bloque"
+                      ></button>
+                    </div>
+                  </div>
+                  <div class="key-reveal" id="keyReveal" hidden>
+                    <img src="assets/escape-key.png" alt="" />
+                    <div>
+                      <strong>Llave conseguida</strong>
+                      <span>Ahora podemos escapar juntos.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <p class="game-status" id="creeperStatus" aria-live="polite">Faltan cuatro bloques para conseguir la llave.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section gallery-section" id="recuerdos" aria-labelledby="gallery-title">
+        <div class="section-heading">
+          <p class="eyebrow dark">Capturas del mundo</p>
+          <h2 id="gallery-title">Nuestros recuerdos favoritos</h2>
+          <p>
+            Aqu&iacute; van las fotos de ustedes, sus monumentos, sus partidas y esos
+            momentos que se sienten guardados en diamante.
+          </p>
+        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
+      </section>
+
+      <section class="section timeline-section" aria-labelledby="timeline-title">
+        <div class="section-heading">
+          <p class="eyebrow dark">Bit&aacute;cora</p>
+          <h2 id="timeline-title">Nuestra aventura</h2>
+        </div>
+        <div class="timeline">
+          <article>
+            <span>20 FEB</span>
+            <h3>Se encendi&oacute; el servidor</h3>
+            <p>El 20 de febrero de 2025, a las 8:00 p. m., nos hicimos novios.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Primer refugio</h3>
+            <p>Cuando empezamos a cuidarnos, re&iacute;rnos y volvernos casa.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>La gran construcci&oacute;n</h3>
+            <p>Todo lo que hemos levantado con paciencia, cari&ntilde;o y confianza.</p>
+          </article>
+          <article>
+            <span>04</span>
+            <h3>Y lo que sigue</h3>
+            <p>Todo lo que falta por descubrir, recorrer y construir juntos.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section chest-section" id="cofre" aria-labelledby="chest-title">
+        <div class="chest-copy">
+          <p class="eyebrow dark">Cofre secreto</p>
+          <h2 id="chest-title">Tres bloques para ti</h2>
+          <p>
+            Cada bloque guarda una parte de este regalo: una promesa, un
+            recuerdo y un plan para seguir construyendo juntos.
+          </p>
+        </div>
+        <div class="chest-panel">
+          <div class="chest-buttons" role="group" aria-label="Mensajes del cofre">
+            <button class="chest-button active" type="button" data-message="0">
+              <span class="mini-block promise" aria-hidden="true"></span>
+              Promesa
+            </button>
+            <button class="chest-button" type="button" data-message="1">
+              <span class="mini-block memory" aria-hidden="true"></span>
+              Recuerdo
+            </button>
+            <button class="chest-button" type="button" data-message="2">
+              <span class="mini-block plan" aria-hidden="true"></span>
+              Plan
+            </button>
+          </div>
+          <div class="message-box" aria-live="polite">
+            <p id="secretMessage"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="night-section" id="noche" aria-labelledby="night-title">
+        <div class="night-inner">
+          <div class="night-heading">
+            <p class="eyebrow night-eyebrow">Cuando cae la noche</p>
+            <h2 id="night-title">Cartas para nuestro mundo</h2>
+            <p>Porque hasta en la oscuridad, contigo siempre hay un camino de vuelta a casa.</p>
+          </div>
+
+          <div class="night-card-grid" aria-label="Cartas de noche">
+            <figure class="night-card">
+              <img src="assets/night/card-enchant.jpeg" alt="Carta sobre una mesa de encantamientos" loading="lazy" />
+            </figure>
+            <figure class="night-card">
+              <img src="assets/night/card-torch.jpeg" alt="Carta sobre una antorcha en la oscuridad" loading="lazy" />
+            </figure>
+            <figure class="night-card">
+              <img src="assets/night/card-book.jpeg" alt="Carta sobre un libro encantado" loading="lazy" />
+            </figure>
+            <figure class="night-card">
+              <img src="assets/night/card-sword.jpeg" alt="Carta sobre una espada de diamante" loading="lazy" />
+            </figure>
+            <figure class="night-card">
+              <img src="assets/night/card-pumpkin.jpeg" alt="Carta sobre una calabaza iluminada" loading="lazy" />
+            </figure>
+          </div>
+
+          <div class="night-sprite-row" aria-hidden="true">
+            <img src="assets/night/item-enchant.jpeg" alt="" loading="lazy" />
+            <img src="assets/night/item-book.jpeg" alt="" loading="lazy" />
+            <img src="assets/night/item-sword.jpeg" alt="" loading="lazy" />
+            <img src="assets/night/item-pumpkin.jpeg" alt="" loading="lazy" />
+            <img src="assets/night/item-torch.jpeg" alt="" loading="lazy" />
+            <img src="assets/night/item-heart.jpeg" alt="" loading="lazy" />
+          </div>
+        </div>
+      </section>
+
+      <section class="section letter-section" id="carta" aria-labelledby="letter-title">
+        <div class="letter">
+          <p class="eyebrow dark">Carta</p>
+          <h2 id="letter-title">Para mi ni&ntilde;a hermosa</h2>
+          <p>
+            Gracias por este tiempo. Gracias por quedarte, por jugar, por
+            re&iacute;rte conmigo y por hacer que hasta los d&iacute;as normales tengan algo
+            especial. Si pudiera construirte algo enorme bloque por bloque,
+            empezar&iacute;a con todo lo que me haces sentir y aun as&iacute; me faltar&iacute;a
+            espacio.
+          </p>
+          <p>
+            Te amo mucho. Y si este mundo es nuestro, yo quiero seguir
+            explor&aacute;ndolo contigo, sin prisa, con cuidado y con el coraz&oacute;n lleno.
+          </p>
+          <div class="signature">Con todo mi amor</div>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

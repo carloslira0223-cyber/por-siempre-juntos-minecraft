@@ -95,10 +95,21 @@ const counterFields = {
   seconds: document.querySelector("#countSeconds")
 };
 
+const coordinateSearch = document.querySelector("#coordinateSearch");
+const coordinateLoader = document.querySelector("#coordinateLoader");
+const coordinateStatus = document.querySelector("#coordinateStatus");
+const coordinateProgress = document.querySelector("#coordinateProgress");
+const coordinatePercent = document.querySelector("#coordinatePercent");
+const coordinateSuccess = document.querySelector("#coordinateSuccess");
+const mapReveal = document.querySelector("#mapReveal");
 const triviaQuestion = document.querySelector("#triviaQuestion");
 const triviaChoices = document.querySelector("#triviaChoices");
 const triviaStatus = document.querySelector("#triviaStatus");
 const triviaProgress = document.querySelector("#triviaProgress");
+const triviaSeedNumber = document.querySelector("#triviaSeedNumber");
+const memorySeedTrack = document.querySelector("#memorySeedTrack");
+const memoryQuestionVisual = document.querySelector("#memoryQuestionVisual");
+const gardenQuiz = document.querySelector(".garden-quiz");
 const seedCount = document.querySelector("#seedCount");
 const inventorySeedCount = document.querySelector("#inventorySeedCount");
 const gardenStatus = document.querySelector("#gardenStatus");
@@ -106,29 +117,52 @@ const waterReward = document.querySelector("#waterReward");
 
 const gardenTrivia = [
   {
-    question: "\u00bfQu\u00e9 es lo que m\u00e1s me gusta de ti?",
-    answers: ["Todo de ti.", "Solo tus mensajes.", "Solo los d\u00edas especiales."],
-    correct: 0
+    question: "\u00bfCuando hago alguna de mis nacadas, qu\u00e9 espero conseguir casi siempre?",
+    answers: [
+      { text: "Sacarte una sonrisa o hacerte re\u00edr \u{1F979}\u{1F497}", correct: true },
+      { text: "Que me tengas que aguantar porque no queda de otra \u{1F608}", correct: false },
+      { text: "Demostrar que puedo hacer todav\u00eda m\u00e1s nacadas", correct: false }
+    ]
   },
   {
-    question: "\u00bfD\u00f3nde se encendi\u00f3 nuestro servidor por primera vez?",
-    answers: ["En el lugar que solo nosotros sabemos.", "En un bioma perdido.", "En una aventura cualquiera."],
-    correct: 0
+    question: "\u00bfQu\u00e9 quiero decir cuando te digo que te amo \u201cinfinitamente y m\u00e1s all\u00e1\u201d?",
+    answers: [
+      { text: "Que te amo much\u00edsimo, pero alg\u00fan d\u00eda se acaba", correct: false },
+      { text: "Que mi amor por ti no tiene una medida ni un final \u{1F497}", correct: true },
+      { text: "Que tenemos que encontrar el borde del mundo de Minecraft", correct: false }
+    ]
   },
   {
-    question: "\u00bfQu\u00e9 admiro de tu historia en la escuela?",
-    answers: ["Tu esfuerzo, tus metas y todo lo que logras.", "Que nunca tengas tareas.", "Que no cambies con el tiempo."],
-    correct: 0
+    question: "\u00bfCu\u00e1l ser\u00eda para m\u00ed el verdadero hogar?",
+    answers: [
+      { text: "La casa m\u00e1s grande y bonita que podamos construir", correct: false },
+      { text: "Cualquier lugar donde tengamos nuestras cosas", correct: false },
+      { text: "El lugar donde pueda estar contigo \u{1F3E1}\u{1F497}", correct: true }
+    ]
   },
   {
-    question: "\u00bfQu\u00e9 recuerdo guardar\u00eda primero en un cofre infinito?",
-    answers: ["El d\u00eda en que empez\u00f3 lo nuestro.", "Un bloque cualquiera.", "Un mapa sin nombre."],
-    correct: 0
+    question: "\u00bfQu\u00e9 parte de ti me parece m\u00e1s bonita?",
+    answers: [
+      { text: "Solamente tus ojitos", correct: false },
+      { text: "Toda t\u00fa: tu forma de ser, tu risa, tus expresiones, tus gestitos y todo lo que te hace ser t\u00fa \u{1F979}\u{1F497}", correct: true },
+      { text: "Solamente cuando te arreglas mucho", correct: false }
+    ]
+  },
+  {
+    question: "\u00bfQu\u00e9 significa cuando digo que te elegir\u00eda en todas las vidas?",
+    answers: [
+      { text: "Que si pudiera volver a empezar una y otra vez, volver\u00eda a encontrarte y elegirte a ti \u{1F497}", correct: true },
+      { text: "Que tendr\u00edamos infinitas partidas de Minecraft", correct: false },
+      { text: "Que quiero respawnear contigo cada vez que perdamos", correct: false }
+    ]
   },
   {
     question: "\u00bfQu\u00e9 quiero seguir construyendo contigo?",
-    answers: ["Un futuro entero contigo.", "Una sola partida m\u00e1s.", "Un mundo sin recuerdos."],
-    correct: 0
+    answers: [
+      { text: "Solamente nuestro mundo de Minecraft", correct: false },
+      { text: "Una casa enorme y much\u00edsimas construcciones", correct: false },
+      { text: "Much\u00edsimos recuerdos, aventuras y una historia que siga siendo nuestra \u{1F979}\u{1F497}", correct: true }
+    ]
   }
 ];
 
@@ -137,9 +171,11 @@ let draggedItemId = null;
 let pointerDrag = null;
 let suppressNextClickItemId = null;
 let triviaIndex = 0;
+let triviaLocked = false;
 let seedsAvailable = 0;
 let plantedFlowerCount = 0;
 let isMusicMuted = false;
+let coordinateSearchStarted = false;
 let netherProgress = loadNetherProgress();
 let netherKeyReady = netherProgress.creeperKeyObtained;
 let netherUnlocked = netherProgress.netherUnlocked;
@@ -1247,6 +1283,116 @@ function initializeIntro() {
   });
 }
 
+function setCoordinateProgress(percent) {
+  if (!coordinateProgress) {
+    return;
+  }
+
+  const safePercent = Math.max(0, Math.min(100, percent));
+  const filledBlocks = Math.round((safePercent / 100) * coordinateProgress.children.length);
+
+  Array.from(coordinateProgress.children).forEach((block, index) => {
+    block.classList.toggle("is-filled", index < filledBlocks);
+  });
+
+  coordinateProgress.setAttribute("aria-valuenow", String(safePercent));
+  if (coordinatePercent) {
+    coordinatePercent.textContent = safePercent + "%";
+  }
+}
+
+function getCoordinateDelay(delay) {
+  const reduceMotion = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  return reduceMotion ? 0 : delay;
+}
+
+function revealCoordinateMap() {
+  if (!coordinateSearch || !mapReveal) {
+    return;
+  }
+
+  if (coordinateSuccess) {
+    coordinateSuccess.classList.remove("is-visible");
+    coordinateSuccess.classList.add("is-leaving");
+  }
+
+  window.setTimeout(() => {
+    if (coordinateSuccess) {
+      coordinateSuccess.hidden = true;
+    }
+
+    mapReveal.hidden = false;
+    coordinateSearch.dataset.state = "complete";
+    window.requestAnimationFrame(() => mapReveal.classList.add("is-revealed"));
+  }, getCoordinateDelay(220));
+}
+
+function showCoordinateResult() {
+  if (!coordinateLoader || !coordinateSuccess) {
+    revealCoordinateMap();
+    return;
+  }
+
+  coordinateLoader.classList.add("is-leaving");
+  window.setTimeout(() => {
+    coordinateLoader.hidden = true;
+    coordinateSuccess.hidden = false;
+    window.requestAnimationFrame(() => coordinateSuccess.classList.add("is-visible"));
+    window.setTimeout(revealCoordinateMap, getCoordinateDelay(900));
+  }, getCoordinateDelay(220));
+}
+
+function startCoordinateSearch() {
+  if (!coordinateSearch || coordinateSearchStarted) {
+    return;
+  }
+
+  coordinateSearchStarted = true;
+  coordinateSearch.dataset.state = "searching";
+  const stages = [
+    { message: "Cargando mundo\u2026", progress: 12, delay: 0 },
+    { message: "Buscando coordenadas\u2026", progress: 40, delay: 800 },
+    { message: "Siguiendo el hilito rojo\u2026 \u{1F497}", progress: 70, delay: 1600 },
+    { message: "Ubicaci\u00f3n localizada.", progress: 100, delay: 2400 }
+  ];
+
+  stages.forEach((stage) => {
+    window.setTimeout(() => {
+      if (coordinateStatus) {
+        coordinateStatus.textContent = stage.message;
+      }
+      setCoordinateProgress(stage.progress);
+    }, getCoordinateDelay(stage.delay));
+  });
+
+  window.setTimeout(showCoordinateResult, getCoordinateDelay(3280));
+}
+
+function initializeCoordinateSearch() {
+  if (!coordinateSearch) {
+    return;
+  }
+
+  if (!("IntersectionObserver" in window)) {
+    startCoordinateSearch();
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
+          startCoordinateSearch();
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: [0.35] }
+  );
+
+  observer.observe(coordinateSearch);
+}
+
 function getFlowerBeds() {
   return Array.from(document.querySelectorAll("[data-flower-bed]"));
 }
@@ -1267,7 +1413,7 @@ function updateSeedInventory() {
   }
 
   if (seedSlot && seedSlot.classList.contains("is-unlocked")) {
-    const seedLabel = "Semillas de flores: " + seedsAvailable + " disponibles";
+    const seedLabel = "Semillas de flores: " + seedsAvailable + " disponibles de " + gardenTrivia.length;
     seedSlot.title = seedLabel;
     seedSlot.setAttribute("aria-label", seedLabel);
   }
@@ -1281,66 +1427,159 @@ function updateGardenControls() {
   });
 }
 
+function shuffleTriviaAnswers(answers) {
+  const shuffledAnswers = answers.slice();
+
+  for (let index = shuffledAnswers.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    const temporaryAnswer = shuffledAnswers[index];
+    shuffledAnswers[index] = shuffledAnswers[randomIndex];
+    shuffledAnswers[randomIndex] = temporaryAnswer;
+  }
+
+  return shuffledAnswers;
+}
+
+function renderMemorySeedTrack() {
+  if (!memorySeedTrack) {
+    return;
+  }
+
+  Array.from(memorySeedTrack.children).forEach((seed, index) => {
+    seed.classList.toggle("is-grown", index < triviaIndex);
+  });
+}
+
+function syncTriviaProgress() {
+  const totalSeeds = gardenTrivia.length;
+  const completedSeeds = Math.min(triviaIndex, totalSeeds);
+
+  if (triviaProgress) {
+    triviaProgress.textContent = completedSeeds + " / " + totalSeeds;
+  }
+
+  if (triviaSeedNumber) {
+    triviaSeedNumber.textContent = completedSeeds >= totalSeeds
+      ? "Todas las semillas han florecido \u2713"
+      : "Semilla " + (completedSeeds + 1) + " de " + totalSeeds;
+  }
+
+  renderMemorySeedTrack();
+}
+
 function renderTrivia() {
   if (!triviaQuestion || !triviaChoices || !triviaProgress) {
     return;
   }
 
+  triviaLocked = false;
+  triviaChoices.classList.remove("is-transitioning");
+  if (gardenQuiz) {
+    gardenQuiz.classList.remove("is-planting");
+  }
+  if (memoryQuestionVisual) {
+    memoryQuestionVisual.classList.remove("is-answering", "is-complete");
+  }
+
+  syncTriviaProgress();
+
   if (triviaIndex >= gardenTrivia.length) {
-    triviaQuestion.textContent = "Las cinco semillas ya son tuyas.";
+    if (gardenQuiz) {
+      gardenQuiz.classList.add("is-complete");
+    }
+    if (memoryQuestionVisual) {
+      memoryQuestionVisual.classList.add("is-complete");
+    }
+    triviaQuestion.textContent = "Nuestro jard\u00edn creci\u00f3 con cada recuerdo que solo t\u00fa y yo conocemos. \u{1F979}\u{1F497}";
     triviaChoices.replaceChildren();
-    triviaProgress.textContent = "5 / 5";
+    if (triviaStatus) {
+      triviaStatus.textContent = "Todas las semillas ya est\u00e1n en el inventario. Ahora toca hacerlas florecer.";
+    }
     return;
   }
 
   const trivia = gardenTrivia[triviaIndex];
+  if (gardenQuiz) {
+    gardenQuiz.classList.remove("is-complete");
+  }
   triviaQuestion.textContent = trivia.question;
-  triviaProgress.textContent = triviaIndex + " / " + gardenTrivia.length;
   triviaChoices.replaceChildren();
+  if (triviaStatus) {
+    triviaStatus.textContent = "";
+  }
 
-  trivia.answers.forEach((answer, answerIndex) => {
+  shuffleTriviaAnswers(trivia.answers).forEach((answer) => {
     const button = document.createElement("button");
+    const answerCopy = document.createElement("span");
+    const answerState = document.createElement("span");
+
     button.className = "trivia-choice";
     button.type = "button";
-    button.textContent = answer;
-    button.addEventListener("click", () => answerTrivia(answerIndex));
+    answerCopy.className = "trivia-choice-copy";
+    answerCopy.textContent = answer.text;
+    answerState.className = "trivia-choice-state";
+    answerState.setAttribute("aria-hidden", "true");
+    button.append(answerCopy, answerState);
+    button.addEventListener("click", () => answerTrivia(answer, button));
     triviaChoices.appendChild(button);
   });
 }
 
-function answerTrivia(answerIndex) {
+function answerTrivia(answer, selectedChoice) {
   const trivia = gardenTrivia[triviaIndex];
 
-  if (!trivia || !triviaStatus) {
+  if (!trivia || !triviaStatus || !selectedChoice || triviaLocked) {
     return;
   }
 
-  if (answerIndex !== trivia.correct) {
-    const selectedChoice = triviaChoices.children[answerIndex];
-    if (selectedChoice) {
-      selectedChoice.classList.add("is-wrong");
-      window.setTimeout(() => selectedChoice.classList.remove("is-wrong"), 420);
+  const answerState = selectedChoice.querySelector(".trivia-choice-state");
+
+  if (!answer.correct) {
+    const retryMessages = [
+      "Esa semillita no era \u{1F331}\u2715",
+      "Mmm\u2026 esa no floreci\u00f3. Intenta otra vez \u{1F497}",
+      "Casi, mi amor. Ese recuerdo necesita otra respuesta."
+    ];
+    selectedChoice.disabled = true;
+    selectedChoice.classList.add("is-wrong");
+    if (answerState) {
+      answerState.textContent = "\u2715";
     }
-    triviaStatus.textContent = "Ese recuerdo no era. Piensa en nuestra historia y vuelve a intentarlo.";
+    triviaStatus.textContent = retryMessages[Math.floor(Math.random() * retryMessages.length)];
     return;
+  }
+
+  triviaLocked = true;
+  selectedChoice.classList.add("is-correct");
+  if (answerState) {
+    answerState.textContent = "\u2713";
+  }
+  Array.from(triviaChoices.querySelectorAll("button")).forEach((button) => {
+    button.disabled = true;
+  });
+
+  if (gardenQuiz) {
+    gardenQuiz.classList.add("is-planting");
+  }
+  if (memoryQuestionVisual) {
+    memoryQuestionVisual.classList.add("is-answering");
   }
 
   seedsAvailable += 1;
   triviaIndex += 1;
   updateSeedInventory();
   updateGardenControls();
-  renderTrivia();
-  spawnSparkleBlocks(3);
+  syncTriviaProgress();
+  triviaStatus.textContent = "\u{1F331} Semilla de memoria plantada";
+  setInventoryMessage("Semillas de flores guardadas: " + seedsAvailable + " de " + gardenTrivia.length + ".");
+  spawnSparkleBlocks(triviaIndex >= gardenTrivia.length ? 8 : 3);
 
-  if (triviaIndex >= gardenTrivia.length) {
-    triviaStatus.textContent = "Cinco recuerdos acertados. El jard\u00edn ya puede despertar.";
-    if (gardenStatus) {
-      gardenStatus.textContent = "Ya tienes cinco semillas. Elige una parcela para plantar la primera flor.";
-    }
-  } else {
-    triviaStatus.textContent = "Respuesta acertada: una semilla entr\u00f3 al inventario.";
-    setInventoryMessage("Semillas de flores guardadas: " + seedsAvailable + " de 5.");
+  if (triviaIndex >= gardenTrivia.length && gardenStatus) {
+    gardenStatus.textContent = "Ya tienes " + gardenTrivia.length + " semillas. Elige una parcela para plantar la primera flor.";
   }
+
+  triviaChoices.classList.add("is-transitioning");
+  window.setTimeout(renderTrivia, 900);
 }
 
 function plantFlower(bed) {
@@ -1355,7 +1594,7 @@ function plantFlower(bed) {
     return;
   }
 
-  const flowerNames = ["tulip\u00e1n rojo", "rosa roja", "flor naranja", "flor amarilla", "flor azul"];
+  const flowerNames = ["tulip\u00e1n rojo", "rosa roja", "flor naranja", "flor amarilla", "flor azul", "flor de recuerdos"];
   const flowerName = flowerNames[Number(bed.dataset.flowerBed)] || "flor";
 
   seedsAvailable -= 1;
@@ -1862,6 +2101,7 @@ initializeInventoryDrawer();
 initializeGarden();
 initializeNavigation();
 initializeBuildJourney();
+initializeCoordinateSearch();
 initializeAudio();
 initializeIntro();
 initializeNether();

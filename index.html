@@ -8,7 +8,7 @@
       name="description"
       content="Una p&aacute;gina de aniversario inspirada en mundos de cubitos, hecha con amor."
     />
-    <link rel="stylesheet" href="styles.css?v=20260819-built-world" />
+    <link rel="stylesheet" href="styles.css?v=20260819-coordinates-memory" />
   </head>
   <body class="intro-active">
     <section
@@ -406,33 +406,65 @@
         </div>
       </section>
 
-      <section class="section world-section" aria-labelledby="world-title">
+      <section class="section world-section" aria-labelledby="world-title" id="mapa">
         <div class="world-copy">
           <p class="eyebrow dark">Nuestro mapa</p>
-          <h2 id="world-title">Un mundo hecho bloque por bloque</h2>
+          <h2 id="world-title">Un mundo que seguimos construyendo</h2>
           <p>
-            Me gusta pensar que lo nuestro se parece a construir en creativo:
-            primero una idea, luego paciencia, risa, detalle, y de pronto ya
-            hay una casa enorme hecha de momentos que solo entendemos t&uacute; y yo.
+            Me gusta pensar que lo nuestro empez&oacute; como empiezan los mundos de Minecraft:
+            con un lugar enorme frente a nosotros y sin saber todas las aventuras que
+            &iacute;bamos a vivir. &#129402;&#128150;
           </p>
+          <p>
+            Y poquito a poquito empezamos a llenarlo de cosas nuestras: recuerdos,
+            risas, aventuras, mis nacadas, tus chistes, d&iacute;as incre&iacute;bles y hasta
+            esos momentos peque&ntilde;os que quiz&aacute; nadie m&aacute;s entender&iacute;a.
+          </p>
+          <p>
+            Ahora volteo a ver todo lo que hemos construido y pienso&hellip; no manches,
+            mi esposita hermosa, ya tenemos todo un mundo. &#129402;&#127757;&#128150;
+          </p>
+          <p>Y lo m&aacute;s bonito es que todav&iacute;a quedan much&iacute;simos bloques por colocar juntos.</p>
+          <p class="world-quiet-line">Nuestro mundo todav&iacute;a no est&aacute; terminado&hellip; &#128150;</p>
         </div>
-        <div class="terrain-board" aria-label="Coraz&oacute;n hecho con bloques">
-          <span class="tile tree"></span>
-          <span class="tile grass"></span>
-          <span class="tile flower"></span>
-          <span class="tile stone"></span>
-          <span class="tile water"></span>
-          <span class="tile grass"></span>
-          <span class="tile glow"></span>
-          <span class="tile heart"></span>
-          <span class="tile glow"></span>
-          <span class="tile grass"></span>
-          <span class="tile flower"></span>
-          <span class="tile stone"></span>
-          <span class="tile grass"></span>
-          <span class="tile tree"></span>
-          <span class="tile flower"></span>
-          <span class="tile water"></span>
+        <div class="coordinate-search" id="coordinateSearch" data-state="idle">
+          <div class="coordinate-loader" id="coordinateLoader">
+            <div class="coordinate-compass" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <p class="coordinate-kicker">Localizando coordenadas&hellip;</p>
+            <p class="coordinate-status" id="coordinateStatus" aria-live="polite">Cargando mundo&hellip;</p>
+            <div
+              class="coordinate-progress"
+              id="coordinateProgress"
+              role="progressbar"
+              aria-label="Progreso de la b&uacute;squeda de coordenadas"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="0"
+            >
+              <span></span><span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <p class="coordinate-percent" id="coordinatePercent">0%</p>
+          </div>
+
+          <div class="coordinate-success" id="coordinateSuccess" aria-live="polite" hidden>
+            <p class="coordinate-found-heading"><span aria-hidden="true">&#10003;</span> Coordenadas encontradas</p>
+            <div class="romantic-coordinates" aria-label="Coordenadas encontradas">
+              <span>X: &infin;</span>
+              <span>Y: &#10084;</span>
+              <span>Z: juntos</span>
+            </div>
+            <p class="coordinate-destination">Destino encontrado</p>
+          </div>
+
+          <figure class="map-reveal" id="mapReveal" hidden>
+            <span class="map-reveal-flash" aria-hidden="true"></span>
+            <img src="assets/mapa-coordenadas.png" alt="Mapa de nuestro mundo" />
+            <figcaption>Parece que no importa cu&aacute;nto exploremos&hellip; nuestras coordenadas siempre terminan encontr&aacute;ndose. &#129402;&#128150;</figcaption>
+            <p>Ubicaci&oacute;n guardada para siempre &#10003;</p>
+          </figure>
         </div>
       </section>
 
@@ -440,7 +472,7 @@
         <div class="section garden-section">
           <div class="section-heading garden-heading">
             <p class="eyebrow dark">Cap&iacute;tulo 01: El d&iacute;a florece</p>
-            <h2 id="garden-title">Cinco recuerdos hacen florecer nuestro jard&iacute;n</h2>
+            <h2 id="garden-title">Seis recuerdos hacen florecer nuestro jard&iacute;n</h2>
             <p>
               Empieza por lo que solo nosotros sabemos. Cada respuesta verdadera
               deja una semilla para nuestro rinc&oacute;n favorito.
@@ -453,9 +485,17 @@
                 <div>
                   <p class="mission-label">Semillas de memoria</p>
                   <h3 id="trivia-title">La trivia de nosotros</h3>
+                  <p class="memory-subtitle">Cada recuerdo correcto hace florecer nuestro jard&iacute;n. &#127793;&#128150;</p>
                 </div>
-                <span class="quiz-progress" id="triviaProgress" aria-live="polite">0 / 5</span>
+                <span class="quiz-progress" id="triviaProgress" aria-live="polite">0 / 6</span>
               </div>
+              <div class="memory-seed-track" id="memorySeedTrack" aria-label="Progreso de semillas de memoria">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <div class="memory-question-visual" id="memoryQuestionVisual">
+                <img src="assets/garden/signo-pregunta.png" alt="Pregunta de memoria" class="memory-question-icon" />
+              </div>
+              <p class="memory-seed-number" id="triviaSeedNumber">Semilla 1 de 6</p>
               <p class="trivia-question" id="triviaQuestion"></p>
               <div class="trivia-choices" id="triviaChoices"></div>
               <p class="garden-status" id="triviaStatus" aria-live="polite"></p>
@@ -467,7 +507,7 @@
                   <p class="mission-label">Rinc&oacute;n secreto</p>
                   <h3 id="planting-title">Nuestro jard&iacute;n en flor</h3>
                 </div>
-                <p class="seed-ledger">En inventario <strong><span id="seedCount">0</span> / 5</strong></p>
+                <p class="seed-ledger">En inventario <strong><span id="seedCount">0</span> / 6</strong></p>
               </div>
               <div class="garden-beds" id="gardenBeds" aria-label="Parcelas de flores">
                 <button class="flower-bed" type="button" disabled data-flower-bed="0" aria-label="Parcela de tulip&aacute;n bloqueada">
@@ -490,6 +530,10 @@
                   <span class="soil-tile" aria-hidden="true"></span>
                   <img src="assets/garden/flower-blue.png" alt="" />
                 </button>
+                <button class="flower-bed" type="button" disabled data-flower-bed="5" aria-label="Parcela de flor de recuerdos bloqueada">
+                  <span class="soil-tile" aria-hidden="true"></span>
+                  <img src="assets/garden/flower-tulip.png" alt="" />
+                </button>
               </div>
               <div class="water-reward" id="waterReward" hidden>
                 <img class="water-bucket" src="assets/water-bucket.png" alt="" />
@@ -498,7 +542,7 @@
                   <span>Un cubo para que lo que construyamos siga creciendo.</span>
                 </div>
               </div>
-              <p class="garden-status" id="gardenStatus" aria-live="polite">A&uacute;n faltan cinco semillas para que el jard&iacute;n despierte.</p>
+              <p class="garden-status" id="gardenStatus" aria-live="polite">A&uacute;n faltan seis semillas para que el jard&iacute;n despierte.</p>
             </article>
           </div>
         </div>
@@ -942,6 +986,6 @@
       </section>
     </main>
 
-    <script src="script.js?v=20260819-built-world"></script>
+    <script src="script.js?v=20260819-coordinates-memory"></script>
   </body>
 </html>

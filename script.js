@@ -1,45 +1,88 @@
-const photos = [
+const memories = [
   {
-    file: "foto-1.jpg",
-    title: "Nuestro primer bioma",
-    caption: "Ese recuerdo que siempre me hace sonre\u00edr."
+    type: "image",
+    source: "assets/recuerdos/recuerdo-01.jpeg",
+    title: "Un rinc\u00f3n rosita",
+    caption: "Un rinconcito construido entre bloques, justo como los que hacen bonito nuestro mundo."
   },
   {
-    file: "foto-2.jpg",
-    title: "Construcci\u00f3n favorita",
-    caption: "Lo que hicimos juntos y se volvi\u00f3 parte de nuestra historia."
+    type: "image",
+    source: "assets/recuerdos/recuerdo-02.jpeg",
+    title: "Camino bajo la lluvia",
+    caption: "Una noche de lluvia y cerezos que merec\u00eda quedarse guardada."
   },
   {
-    file: "foto-3.jpg",
-    title: "Monumento especial",
-    caption: "Un lugarcito del mundo que ya tiene significado."
+    type: "image",
+    source: "assets/recuerdos/recuerdo-03.jpeg",
+    title: "Bajo los cerezos",
+    caption: "Una vista bonita de nuestro mundo mientras la noche segu\u00eda encendida."
   },
   {
-    file: "foto-4.jpg",
-    title: "Captura legendaria",
-    caption: "Porque hay momentos que merecen guardarse para siempre."
+    type: "image",
+    source: "assets/recuerdos/recuerdo-04.jpeg",
+    title: "Un momento de exploraci\u00f3n",
+    caption: "Otro momento de nuestro mundo, guardado tal como pas\u00f3."
   },
   {
-    file: "foto-5.jpg",
-    title: "Modo risa",
-    caption: "De esas cosas simples que contigo se vuelven enormes."
+    type: "image",
+    source: "assets/recuerdos/recuerdo-05.jpeg",
+    title: "Explorando el bosque",
+    caption: "Otro camino de nuestro mundo, descubierto paso a paso."
   },
   {
-    file: "foto-6.jpg",
-    title: "Siguiente aventura",
-    caption: "Todo lo que todav\u00eda quiero vivir contigo."
+    type: "image",
+    source: "assets/recuerdos/recuerdo-06.jpeg",
+    title: "Un rinc\u00f3n con cerditos",
+    caption: "Un peque\u00f1o rinc\u00f3n lleno de vida dentro de nuestro mundo."
+  },
+  {
+    type: "image",
+    source: "assets/recuerdos/recuerdo-07.jpeg",
+    title: "El cuartito de las gallinitas",
+    caption: "Uno de esos lugares que se quedan guardados por lo divertido que se ve."
+  },
+  {
+    type: "image",
+    source: "assets/recuerdos/recuerdo-08.jpeg",
+    title: "El portal abierto",
+    caption: "Una entrada lista para seguir descubriendo mundos juntos."
+  },
+  {
+    type: "video",
+    source: "assets/recuerdos/recuerdo-09.mp4",
+    title: "Una aventura en movimiento",
+    caption: "Un video cortito de una de nuestras partidas."
+  },
+  {
+    type: "video",
+    source: "assets/recuerdos/recuerdo-10.mp4",
+    title: "Un momento guardado",
+    caption: "Una aventura que ahora tambi\u00e9n tiene su lugar en este \u00e1lbum."
+  },
+  {
+    type: "video",
+    source: "assets/recuerdos/recuerdo-11.mp4",
+    title: "Otra vuelta por el mundo",
+    caption: "Otro pedacito de nuestro mundo que vale la pena volver a mirar."
   }
 ];
 
-const messages = [
-  "Prometo seguir cuidando este mundo contigo: con paciencia, con detalles y con mucho amor, incluso cuando toque reconstruir algo bloque por bloque.",
-  "Mi recuerdo favorito no es solo uno. Es cualquier momento en el que te miro y pienso: aqu\u00ed estoy, con mi persona favorita.",
-  "Nuestro siguiente plan: una cita tranquila, algo rico, muchas risas y otro recuerdo bonito para poner en esta p\u00e1gina."
-];
-
-const galleryGrid = document.querySelector("#galleryGrid");
-const secretMessage = document.querySelector("#secretMessage");
-const chestButtons = document.querySelectorAll(".chest-button");
+const memoryAlbum = document.querySelector("#memoryAlbum");
+const galleryLoading = document.querySelector("#galleryLoading");
+const galleryFound = document.querySelector("#galleryFound");
+const galleryFeatured = document.querySelector("#galleryFeatured");
+const galleryMore = document.querySelector("#galleryMore");
+const galleryToggle = document.querySelector("#galleryToggle");
+const galleryFavorite = document.querySelector("#galleryFavorite");
+const memoryLightbox = document.querySelector("#memoryLightbox");
+const memoryLightboxMedia = document.querySelector("#memoryLightboxMedia");
+const memoryLightboxCount = document.querySelector("#memoryLightboxCount");
+const memoryLightboxTitle = document.querySelector("#memoryLightboxTitle");
+const memoryLightboxDescription = document.querySelector("#memoryLightboxDescription");
+const memoryLightboxClose = document.querySelector("#memoryLightboxClose");
+const memoryLightboxPrevious = document.querySelector("#memoryLightboxPrevious");
+const memoryLightboxNext = document.querySelector("#memoryLightboxNext");
+const memoryFavoriteButton = document.querySelector("#memoryFavoriteButton");
 const inventoryMessage = document.querySelector("#inventoryMessage");
 const inventoryDrawer = document.querySelector("#inventoryDrawer");
 const inventoryToggle = document.querySelector("#inventoryToggle");
@@ -85,6 +128,7 @@ const netherRewardOverlay = document.querySelector("#netherRewardOverlay");
 const netherRewardDismiss = document.querySelector("#netherRewardDismiss");
 const relationshipStart = new Date(2025, 1, 20, 20, 0, 0);
 const NETHER_PROGRESS_STORAGE_KEY = "por-siempre-juntos-nether-progress-v2";
+const MEMORY_FAVORITE_STORAGE_KEY = "por-siempre-juntos-memory-favorite-v1";
 const NETHER_BLOCK_TOTAL = 15;
 const counterFields = {
   years: document.querySelector("#countYears"),
@@ -182,6 +226,12 @@ let netherUnlocked = netherProgress.netherUnlocked;
 let netherPickaxeSelected = false;
 let netherPortalTimer = null;
 let netherArrivalTimer = null;
+let memoryGalleryStarted = false;
+let memoryGalleryExpanded = false;
+let activeMemoryIndex = 0;
+let favoriteMemoryIndex = null;
+let memoryLightboxLastFocus = null;
+let memoryTouchStart = null;
 
 const inventoryDetails = {
   "infinite-love": {
@@ -214,42 +264,382 @@ const inventoryDetails = {
   }
 };
 
-function createPhotoCard(photo, index) {
-  const card = document.createElement("article");
-  card.className = "gallery-card";
-
-  const frame = document.createElement("div");
-  frame.className = "photo-frame";
-
-  const img = document.createElement("img");
-  img.src = "assets/fotos/" + photo.file;
-  img.alt = photo.title;
-  img.loading = "lazy";
-
-  const placeholder = document.createElement("div");
-  placeholder.className = "photo-placeholder";
-  placeholder.textContent = "Recuerdo " + (index + 1);
-
-  img.addEventListener("error", () => {
-    img.remove();
-    frame.appendChild(placeholder);
-  });
-
-  frame.appendChild(img);
-
-  const body = document.createElement("div");
-  body.className = "gallery-card-body";
-  body.innerHTML = "<h3>" + photo.title + "</h3><p>" + photo.caption + "</p>";
-
-  card.append(frame, body);
-  return card;
+function formatMemoryNumber(index) {
+  return String(index + 1).padStart(2, "0");
 }
 
-function setMessage(index) {
-  secretMessage.textContent = messages[index];
-  chestButtons.forEach((button) => {
-    button.classList.toggle("active", button.dataset.message === String(index));
+function createMemoryMedia(memory, thumbnail) {
+  if (memory.type === "video") {
+    const video = document.createElement("video");
+    video.src = memory.source;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "");
+    video.preload = thumbnail ? "auto" : "metadata";
+
+    if (thumbnail) {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.tabIndex = -1;
+      video.setAttribute("aria-hidden", "true");
+      video.addEventListener("loadeddata", () => {
+        if (Number.isFinite(video.duration) && video.duration > 0.15) {
+          video.currentTime = Math.min(0.12, video.duration / 4);
+        }
+      }, { once: true });
+    } else {
+      video.controls = true;
+      video.setAttribute("aria-label", "Video: " + memory.title);
+    }
+
+    return video;
+  }
+
+  const image = document.createElement("img");
+  image.src = memory.source;
+  image.alt = thumbnail ? "" : memory.title;
+  image.decoding = "async";
+  image.loading = thumbnail ? "lazy" : "eager";
+
+  if (thumbnail) {
+    image.setAttribute("aria-hidden", "true");
+  }
+
+  return image;
+}
+
+function createMemoryTile(memory, index, variant) {
+  const tile = document.createElement("button");
+  tile.type = "button";
+  tile.className = "memory-tile memory-tile--" + variant;
+  tile.style.setProperty("--memory-order", String(index));
+  tile.setAttribute("aria-label", "Abrir captura " + formatMemoryNumber(index) + ": " + memory.title);
+
+  const frame = document.createElement("span");
+  frame.className = "memory-tile-frame";
+
+  const media = createMemoryMedia(memory, true);
+  media.className = "memory-tile-media";
+  frame.appendChild(media);
+
+  const label = document.createElement("span");
+  label.className = "memory-tile-label";
+  label.textContent = variant === "featured"
+    ? "Captura " + formatMemoryNumber(index) + " / " + memories.length
+    : "Captura " + formatMemoryNumber(index);
+  frame.appendChild(label);
+
+  if (memory.type === "video") {
+    const videoLabel = document.createElement("span");
+    videoLabel.className = "memory-tile-video";
+    videoLabel.textContent = "Video";
+    frame.appendChild(videoLabel);
+  }
+
+  if (favoriteMemoryIndex === index) {
+    const favoriteMark = document.createElement("span");
+    favoriteMark.className = "memory-tile-favorite";
+    favoriteMark.textContent = "\u2665";
+    frame.appendChild(favoriteMark);
+  }
+
+  const title = document.createElement("span");
+  title.className = "memory-tile-title";
+  title.textContent = memory.title;
+
+  tile.append(frame, title);
+  tile.addEventListener("click", () => openMemoryLightbox(index));
+  return tile;
+}
+
+function updateGalleryFavorite() {
+  if (!galleryFavorite) {
+    return;
+  }
+
+  if (!memoryGalleryStarted) {
+    galleryFavorite.hidden = true;
+    return;
+  }
+
+  galleryFavorite.hidden = false;
+  galleryFavorite.textContent = favoriteMemoryIndex === null
+    ? "Todav\u00eda puedes escoger tu recuerdo favorito \u2661"
+    : "\u2665 Recuerdo favorito de nuestro mundo: " + memories[favoriteMemoryIndex].title;
+}
+
+function renderMemoryGallery() {
+  if (!galleryFeatured || !galleryMore || !galleryToggle) {
+    return;
+  }
+
+  galleryFeatured.replaceChildren();
+  galleryMore.replaceChildren();
+
+  const firstMemory = memories[0];
+  if (firstMemory) {
+    galleryFeatured.appendChild(createMemoryTile(firstMemory, 0, "featured"));
+  }
+
+  const secondaryMemories = memories.slice(1, 3);
+  if (secondaryMemories.length) {
+    const pair = document.createElement("div");
+    pair.className = "memory-featured-pair";
+    secondaryMemories.forEach((memory, secondaryIndex) => {
+      pair.appendChild(createMemoryTile(memory, secondaryIndex + 1, "secondary"));
+    });
+    galleryFeatured.appendChild(pair);
+  }
+
+  const additionalMemories = memories.slice(3);
+  if (additionalMemories.length) {
+    const grid = document.createElement("div");
+    grid.className = "memory-gallery-grid";
+    additionalMemories.forEach((memory, additionalIndex) => {
+      grid.appendChild(createMemoryTile(memory, additionalIndex + 3, "grid"));
+    });
+    galleryMore.appendChild(grid);
+  }
+
+  if (galleryFound) {
+    galleryFound.textContent = memories.length + " recuerdos encontrados \u2661";
+    galleryFound.hidden = !memoryGalleryStarted;
+  }
+
+  galleryFeatured.hidden = !memoryGalleryStarted;
+  galleryMore.hidden = !memoryGalleryStarted || !memoryGalleryExpanded || additionalMemories.length === 0;
+  galleryToggle.hidden = !memoryGalleryStarted || additionalMemories.length === 0;
+  galleryToggle.setAttribute("aria-expanded", String(memoryGalleryExpanded));
+  galleryToggle.textContent = memoryGalleryExpanded
+    ? "Ocultar recuerdos ^"
+    : "Ver " + additionalMemories.length + " recuerdos mas";
+
+  updateGalleryFavorite();
+}
+
+function setMemoryGalleryExpanded(expanded) {
+  memoryGalleryExpanded = Boolean(expanded) && memories.length > 3;
+  renderMemoryGallery();
+}
+
+function loadFavoriteMemory() {
+  try {
+    const storedValue = Number.parseInt(window.localStorage.getItem(MEMORY_FAVORITE_STORAGE_KEY), 10);
+    return Number.isInteger(storedValue) && storedValue >= 0 && storedValue < memories.length
+      ? storedValue
+      : null;
+  } catch (error) {
+    return null;
+  }
+}
+
+function saveFavoriteMemory(index) {
+  favoriteMemoryIndex = index;
+
+  try {
+    window.localStorage.setItem(MEMORY_FAVORITE_STORAGE_KEY, String(index));
+  } catch (error) {
+    // The favorite remains available for the current visit when storage is unavailable.
+  }
+}
+
+function refreshMemoryFavoriteButton() {
+  if (!memoryFavoriteButton) {
+    return;
+  }
+
+  const isFavorite = favoriteMemoryIndex === activeMemoryIndex;
+  memoryFavoriteButton.classList.toggle("is-selected", isFavorite);
+  memoryFavoriteButton.setAttribute("aria-pressed", String(isFavorite));
+  memoryFavoriteButton.textContent = isFavorite
+    ? "\u2665 Nuestro recuerdo favorito"
+    : "\u2661 Guardar como favorito";
+}
+
+function setLightboxMemory(index) {
+  if (!memories.length) {
+    return;
+  }
+
+  activeMemoryIndex = (index + memories.length) % memories.length;
+  const memory = memories[activeMemoryIndex];
+
+  if (memoryLightboxMedia) {
+    const media = createMemoryMedia(memory, false);
+    media.className = "memory-lightbox-content";
+    memoryLightboxMedia.replaceChildren(media);
+  }
+
+  if (memoryLightboxCount) {
+    memoryLightboxCount.textContent = "Captura " + formatMemoryNumber(activeMemoryIndex) + " / " + memories.length;
+  }
+
+  if (memoryLightboxTitle) {
+    memoryLightboxTitle.textContent = memory.title;
+  }
+
+  if (memoryLightboxDescription) {
+    memoryLightboxDescription.textContent = memory.caption;
+  }
+
+  refreshMemoryFavoriteButton();
+}
+
+function openMemoryLightbox(index) {
+  if (!memoryLightbox || !memories.length) {
+    return;
+  }
+
+  memoryLightboxLastFocus = document.activeElement;
+  setLightboxMemory(index);
+  memoryLightbox.hidden = false;
+  memoryLightbox.setAttribute("aria-hidden", "false");
+  document.body.classList.add("memory-lightbox-open");
+
+  window.requestAnimationFrame(() => {
+    memoryLightbox.classList.add("is-open");
+    memoryLightboxClose?.focus();
   });
+}
+
+function closeMemoryLightbox() {
+  if (!memoryLightbox || memoryLightbox.hidden) {
+    return;
+  }
+
+  memoryLightbox.classList.remove("is-open");
+  memoryLightbox.hidden = true;
+  memoryLightbox.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("memory-lightbox-open");
+
+  if (memoryLightboxLastFocus && typeof memoryLightboxLastFocus.focus === "function") {
+    memoryLightboxLastFocus.focus({ preventScroll: true });
+  }
+}
+
+function showAdjacentMemory(direction) {
+  setLightboxMemory(activeMemoryIndex + direction);
+}
+
+function trapMemoryLightboxFocus(event) {
+  const focusable = Array.from(memoryLightbox.querySelectorAll("button:not([disabled]), video[controls]"))
+    .filter((element) => !element.hidden);
+
+  if (!focusable.length) {
+    event.preventDefault();
+    return;
+  }
+
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
+function handleMemoryLightboxKeydown(event) {
+  if (!memoryLightbox || memoryLightbox.hidden) {
+    return;
+  }
+
+  if (event.key === "Escape") {
+    event.preventDefault();
+    closeMemoryLightbox();
+  } else if (event.key === "ArrowLeft") {
+    event.preventDefault();
+    showAdjacentMemory(-1);
+  } else if (event.key === "ArrowRight") {
+    event.preventDefault();
+    showAdjacentMemory(1);
+  } else if (event.key === "Tab") {
+    trapMemoryLightboxFocus(event);
+  }
+}
+
+function initializeMemoryGallery() {
+  if (!memoryAlbum || !memories.length) {
+    return;
+  }
+
+  favoriteMemoryIndex = loadFavoriteMemory();
+  renderMemoryGallery();
+
+  const revealGallery = () => {
+    if (memoryGalleryStarted) {
+      return;
+    }
+
+    memoryGalleryStarted = true;
+    window.setTimeout(() => {
+      if (galleryLoading) {
+        galleryLoading.hidden = true;
+      }
+      memoryAlbum.classList.add("is-ready");
+      renderMemoryGallery();
+    }, 760);
+  };
+
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries, currentObserver) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        currentObserver.disconnect();
+        revealGallery();
+      }
+    }, { threshold: 0.12 });
+    observer.observe(memoryAlbum);
+  } else {
+    revealGallery();
+  }
+
+  galleryToggle?.addEventListener("click", () => {
+    setMemoryGalleryExpanded(!memoryGalleryExpanded);
+  });
+
+  memoryLightboxClose?.addEventListener("click", closeMemoryLightbox);
+  memoryLightboxPrevious?.addEventListener("click", () => showAdjacentMemory(-1));
+  memoryLightboxNext?.addEventListener("click", () => showAdjacentMemory(1));
+  memoryFavoriteButton?.addEventListener("click", () => {
+    saveFavoriteMemory(activeMemoryIndex);
+    renderMemoryGallery();
+    refreshMemoryFavoriteButton();
+    memoryFavoriteButton.classList.remove("is-saved");
+    void memoryFavoriteButton.offsetWidth;
+    memoryFavoriteButton.classList.add("is-saved");
+  });
+
+  memoryLightbox?.addEventListener("click", (event) => {
+    if (event.target === memoryLightbox) {
+      closeMemoryLightbox();
+    }
+  });
+
+  memoryLightboxMedia?.addEventListener("touchstart", (event) => {
+    const touch = event.changedTouches[0];
+    memoryTouchStart = touch ? { x: touch.clientX, y: touch.clientY } : null;
+  }, { passive: true });
+
+  memoryLightboxMedia?.addEventListener("touchend", (event) => {
+    const touch = event.changedTouches[0];
+    if (!memoryTouchStart || !touch) {
+      return;
+    }
+
+    const horizontalDistance = touch.clientX - memoryTouchStart.x;
+    const verticalDistance = touch.clientY - memoryTouchStart.y;
+    memoryTouchStart = null;
+
+    if (Math.abs(horizontalDistance) < 70 || Math.abs(horizontalDistance) <= Math.abs(verticalDistance)) {
+      return;
+    }
+
+    showAdjacentMemory(horizontalDistance < 0 ? 1 : -1);
+  }, { passive: true });
+
+  window.addEventListener("keydown", handleMemoryLightboxKeydown);
 }
 
 function setInventoryMessage(message) {
@@ -2081,18 +2471,6 @@ function initializeGames() {
   window.addEventListener("mouseup", finishMouseDrag);
 }
 
-photos.forEach((photo, index) => {
-  galleryGrid.appendChild(createPhotoCard(photo, index));
-});
-
-chestButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    setMessage(Number(button.dataset.message));
-    spawnSparkleBlocks(3);
-  });
-});
-
-setMessage(0);
 updateRelationshipCounter();
 window.setInterval(updateRelationshipCounter, 1000);
 initializeGames();
@@ -2102,6 +2480,7 @@ initializeGarden();
 initializeNavigation();
 initializeBuildJourney();
 initializeCoordinateSearch();
+initializeMemoryGallery();
 initializeAudio();
 initializeIntro();
 initializeNether();

@@ -8,7 +8,7 @@
       name="description"
       content="Una p&aacute;gina de aniversario inspirada en mundos de cubitos, hecha con amor."
     />
-    <link rel="stylesheet" href="styles.css?v=20260819-coordinates-memory" />
+    <link rel="stylesheet" href="styles.css?v=20260819-memory-album" />
   </head>
   <body class="intro-active">
     <section
@@ -863,71 +863,43 @@
           <p class="eyebrow dark">Capturas del mundo</p>
           <h2 id="gallery-title">Nuestros recuerdos favoritos</h2>
           <p>
-            Aqu&iacute; van las fotos de ustedes, sus monumentos, sus partidas y esos
-            momentos que se sienten guardados en diamante.
+            Cada mundo guarda capturas&hellip; pero el nuestro guarda pedacitos de
+            nosotros. Aqu&iacute; est&aacute;n algunas de esas aventuras, construcciones,
+            nacadas y momentos que hicieron que este mundo dejara de ser solo
+            Minecraft y se volviera un pedacito de nuestra historia.
           </p>
         </div>
-        <div class="gallery-grid" id="galleryGrid"></div>
-      </section>
-
-      <section class="section timeline-section" aria-labelledby="timeline-title">
-        <div class="section-heading">
-          <p class="eyebrow dark">Bit&aacute;cora</p>
-          <h2 id="timeline-title">Nuestra aventura</h2>
-        </div>
-        <div class="timeline">
-          <article>
-            <span>20 FEB</span>
-            <h3>Se encendi&oacute; el servidor</h3>
-            <p>El 20 de febrero de 2025, a las 8:00 p. m., nos hicimos novios.</p>
-          </article>
-          <article>
-            <span>02</span>
-            <h3>Primer refugio</h3>
-            <p>Cuando empezamos a cuidarnos, re&iacute;rnos y volvernos casa.</p>
-          </article>
-          <article>
-            <span>03</span>
-            <h3>La gran construcci&oacute;n</h3>
-            <p>Todo lo que hemos levantado con paciencia, cari&ntilde;o y confianza.</p>
-          </article>
-          <article>
-            <span>04</span>
-            <h3>Y lo que sigue</h3>
-            <p>Todo lo que falta por descubrir, recorrer y construir juntos.</p>
-          </article>
+        <div class="memory-album" id="memoryAlbum">
+          <div class="gallery-loading" id="galleryLoading" role="status" aria-live="polite">
+            <span class="gallery-loading-block" aria-hidden="true"></span>
+            <p>Cargando capturas del mundo&hellip;</p>
+          </div>
+          <p class="gallery-found" id="galleryFound" hidden aria-live="polite"></p>
+          <div class="gallery-featured" id="galleryFeatured" hidden></div>
+          <div class="gallery-more" id="galleryMore" hidden></div>
+          <button class="gallery-toggle" id="galleryToggle" type="button" hidden aria-expanded="false"></button>
+          <p class="gallery-favorite" id="galleryFavorite" hidden></p>
         </div>
       </section>
 
-      <section class="section chest-section" id="cofre" aria-labelledby="chest-title">
-        <div class="chest-copy">
-          <p class="eyebrow dark">Cofre secreto</p>
-          <h2 id="chest-title">Tres bloques para ti</h2>
-          <p>
-            Cada bloque guarda una parte de este regalo: una promesa, un
-            recuerdo y un plan para seguir construyendo juntos.
-          </p>
-        </div>
-        <div class="chest-panel">
-          <div class="chest-buttons" role="group" aria-label="Mensajes del cofre">
-            <button class="chest-button active" type="button" data-message="0">
-              <span class="mini-block promise" aria-hidden="true"></span>
-              Promesa
-            </button>
-            <button class="chest-button" type="button" data-message="1">
-              <span class="mini-block memory" aria-hidden="true"></span>
-              Recuerdo
-            </button>
-            <button class="chest-button" type="button" data-message="2">
-              <span class="mini-block plan" aria-hidden="true"></span>
-              Plan
-            </button>
+      <div class="memory-lightbox" id="memoryLightbox" hidden role="dialog" aria-modal="true" aria-labelledby="memoryLightboxTitle" aria-describedby="memoryLightboxDescription">
+        <div class="memory-lightbox-dialog" tabindex="-1">
+          <div class="memory-lightbox-header">
+            <p id="memoryLightboxCount" aria-live="polite"></p>
+            <button class="memory-lightbox-close" id="memoryLightboxClose" type="button" aria-label="Cerrar recuerdo" title="Cerrar recuerdo">&times;</button>
           </div>
-          <div class="message-box" aria-live="polite">
-            <p id="secretMessage"></p>
+          <div class="memory-lightbox-stage">
+            <div class="memory-lightbox-media" id="memoryLightboxMedia"></div>
+            <button class="memory-lightbox-nav memory-lightbox-previous" id="memoryLightboxPrevious" type="button" aria-label="Recuerdo anterior" title="Recuerdo anterior">&larr;</button>
+            <button class="memory-lightbox-nav memory-lightbox-next" id="memoryLightboxNext" type="button" aria-label="Siguiente recuerdo" title="Siguiente recuerdo">&rarr;</button>
+          </div>
+          <div class="memory-lightbox-details">
+            <h3 id="memoryLightboxTitle"></h3>
+            <p id="memoryLightboxDescription"></p>
+            <button class="memory-favorite-button" id="memoryFavoriteButton" type="button" aria-pressed="false"></button>
           </div>
         </div>
-      </section>
+      </div>
 
       <section class="night-section" id="noche" aria-labelledby="night-title">
         <div class="night-inner">
@@ -986,6 +958,6 @@
       </section>
     </main>
 
-    <script src="script.js?v=20260819-coordinates-memory"></script>
+    <script src="script.js?v=20260819-memory-album"></script>
   </body>
 </html>

@@ -8,7 +8,7 @@
       name="description"
       content="Una p&aacute;gina de aniversario inspirada en mundos de cubitos, hecha con amor."
     />
-    <link rel="stylesheet" href="styles.css?v=20260819-nether-adventure" />
+    <link rel="stylesheet" href="styles.css?v=20260819-built-world" />
   </head>
   <body class="intro-active">
     <section
@@ -168,7 +168,11 @@
 
     <nav class="topbar" aria-label="Secciones de la p&aacute;gina">
       <a class="brand" data-nav-link href="#inicio" aria-label="Volver al inicio">
-        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-mark" aria-hidden="true">
+          <span class="brand-cube-top"></span>
+          <span class="brand-cube-front"></span>
+          <span class="brand-cube-side"></span>
+        </span>
         Nuestro mundo
       </a>
       <div class="nav-links">
@@ -340,26 +344,64 @@
     </button>
 
     <main>
-      <section class="section intro-section" aria-labelledby="intro-title">
-        <div class="section-heading">
-          <p class="eyebrow dark">Modo aventura activado</p>
-          <h2 id="intro-title">Lo que hemos construido</h2>
+      <section class="section intro-section build-section" aria-labelledby="intro-title">
+        <div class="build-heading-row">
+          <div class="section-heading build-heading">
+            <p class="eyebrow dark">Modo aventura activado</p>
+            <h2 id="intro-title">Lo que hemos construido</h2>
+            <p>Cada rinc&oacute;n empez&oacute; con un bloque y termin&oacute; sinti&eacute;ndose como nosotros.</p>
+          </div>
+          <p class="build-map-label" aria-label="Recorrido de nuestras construcciones">
+            <span aria-hidden="true"></span>
+            Base, luz y coraz&oacute;n
+          </p>
         </div>
-        <div class="intro-grid">
-          <article class="stat-card">
-            <span class="block-icon grass" aria-hidden="true"></span>
-            <h3>Una base</h3>
-            <p>Ese lugar donde todo se siente tranquilo porque est&aacute;s t&uacute;.</p>
+
+        <div class="build-journey" data-build-journey>
+          <div class="build-path" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+
+          <article class="build-card build-card--base" data-build-card>
+            <div class="build-card-media build-card-media--base">
+              <img src="assets/construido/casa-rosita.png" alt="Nuestra casita de bloques rosita en Minecraft" />
+              <span class="build-media-tag">Nuestro refugio</span>
+            </div>
+            <div class="build-card-copy">
+              <p class="build-step">Construcci&oacute;n 01</p>
+              <h3>Una base</h3>
+              <p>Ese lugar donde todo se siente tranquilo porque est&aacute;s t&uacute;.</p>
+            </div>
           </article>
-          <article class="stat-card">
-            <span class="block-icon glow" aria-hidden="true"></span>
-            <h3>Luz propia</h3>
-            <p>La forma en la que haces que hasta un d&iacute;a simple valga oro.</p>
+
+          <article class="build-card build-card--light" data-build-card>
+            <div class="build-card-media build-card-media--light" aria-hidden="true">
+              <span class="torch-halo"></span>
+              <span class="torch-pixel torch-pixel--one"></span>
+              <span class="torch-pixel torch-pixel--two"></span>
+              <span class="torch-pixel torch-pixel--three"></span>
+              <img src="assets/construido/antorcha.png" alt="" />
+            </div>
+            <div class="build-card-copy">
+              <p class="build-step">Construcci&oacute;n 02</p>
+              <h3>Luz propia</h3>
+              <p>La forma en la que haces que hasta un d&iacute;a simple valga oro.</p>
+            </div>
           </article>
-          <article class="stat-card">
-            <span class="block-icon heart" aria-hidden="true"></span>
-            <h3>Un monumento</h3>
-            <p>Uno que no cabe en cubitos: todo lo que siento por ti.</p>
+
+          <article class="build-card build-card--heart" data-build-card>
+            <div class="build-card-media build-card-media--heart" aria-hidden="true">
+              <span class="heart-spark heart-spark--one"></span>
+              <span class="heart-spark heart-spark--two"></span>
+              <span class="heart-spark heart-spark--three"></span>
+              <span class="heart-spark heart-spark--four"></span>
+              <img src="assets/construido/corazon-pixel.png" alt="" />
+            </div>
+            <div class="build-card-copy">
+              <p class="build-step">Construcci&oacute;n 03</p>
+              <h3>Un monumento</h3>
+              <p>Uno que no cabe en cubitos: todo lo que siento por ti.</p>
+            </div>
           </article>
         </div>
       </section>
@@ -900,6 +942,6 @@
       </section>
     </main>
 
-    <script src="script.js?v=20260819-nether-adventure-v2"></script>
+    <script src="script.js?v=20260819-built-world"></script>
   </body>
 </html>

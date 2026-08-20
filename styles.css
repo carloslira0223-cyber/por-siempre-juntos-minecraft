@@ -4538,3 +4538,505 @@ button,
     transition-duration: 1ms !important;
   }
 }
+
+/* The first three milestones are a small world of their own. */
+.build-section {
+  padding-bottom: 68px;
+}
+
+.build-heading-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 30px;
+}
+
+.build-heading {
+  margin-bottom: 0;
+}
+
+.build-heading > p:last-child {
+  max-width: 610px;
+  margin: 12px 0 0;
+}
+
+.build-map-label {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  color: #6c4d3e;
+  font-family: "Courier New", monospace;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.build-map-label span {
+  width: 28px;
+  height: 8px;
+  display: inline-block;
+  border: 1px solid rgba(70, 84, 44, 0.44);
+  background: repeating-linear-gradient(90deg, #70aa55 0 7px, #8a633f 7px 14px);
+  box-shadow: 3px 3px 0 rgba(56, 42, 25, 0.13);
+}
+
+.build-journey {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.build-path {
+  position: absolute;
+  z-index: 0;
+  top: 102px;
+  right: 10%;
+  left: 10%;
+  height: 10px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  pointer-events: none;
+}
+
+.build-path::before {
+  position: absolute;
+  top: 3px;
+  right: 0;
+  left: 0;
+  height: 4px;
+  content: "";
+  background: repeating-linear-gradient(90deg, #9f764e 0 8px, #70aa55 8px 16px);
+  box-shadow: 0 2px 0 rgba(45, 62, 30, 0.16);
+}
+
+.build-path span {
+  width: 12px;
+  height: 12px;
+  justify-self: center;
+  border: 1px solid rgba(60, 46, 31, 0.32);
+  background: #d9b16b;
+  box-shadow: 2px 2px 0 rgba(60, 46, 31, 0.18);
+}
+
+.build-card {
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  border: 1px solid rgba(125, 104, 74, 0.22);
+  border-radius: 7px;
+  background: #fffdf7;
+  box-shadow: 0 15px 30px rgba(68, 51, 30, 0.12);
+  transition: border-color 220ms ease, box-shadow 220ms ease, opacity 460ms ease, transform 460ms ease;
+}
+
+.build-card::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 18px;
+  height: 18px;
+  border-left: 1px solid rgba(255, 255, 255, 0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+  content: "";
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.build-card-media {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(95, 78, 53, 0.18);
+}
+
+.build-card-media--base {
+  aspect-ratio: 1536 / 688;
+  background: #cfaf9d;
+}
+
+.build-card-media--base::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  background: linear-gradient(0deg, rgba(54, 32, 21, 0.25), transparent 48%);
+}
+
+.build-card-media--base img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  image-rendering: pixelated;
+}
+
+.build-media-tag {
+  position: absolute;
+  z-index: 1;
+  right: 10px;
+  bottom: 10px;
+  padding: 5px 7px;
+  color: #fff8e9;
+  background: rgba(50, 35, 28, 0.72);
+  box-shadow: 2px 2px 0 rgba(21, 14, 9, 0.24);
+  font-family: "Courier New", monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.build-card-media--light,
+.build-card-media--heart {
+  min-height: 168px;
+  display: grid;
+  place-items: center;
+}
+
+.build-card-media--light {
+  isolation: isolate;
+  background:
+    linear-gradient(135deg, rgba(86, 59, 37, 0.92), rgba(48, 35, 28, 0.98)),
+    url("assets/construido/pasto-tierra.png") center / cover;
+}
+
+.build-card-media--light::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  background: linear-gradient(0deg, rgba(24, 18, 14, 0.48), transparent 64%);
+}
+
+.build-card-media--light img {
+  width: 118px;
+  height: 118px;
+  position: relative;
+  z-index: 2;
+  display: block;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 8px 4px rgba(23, 14, 8, 0.42));
+  animation: torch-float 2.7s ease-in-out infinite;
+}
+
+.torch-halo {
+  width: 134px;
+  height: 134px;
+  position: absolute;
+  z-index: 0;
+  border: 1px solid rgba(255, 226, 134, 0.36);
+  background: radial-gradient(circle, rgba(255, 228, 124, 0.54), rgba(246, 156, 51, 0.18) 42%, transparent 70%);
+  box-shadow: 0 0 38px rgba(255, 187, 65, 0.34);
+  animation: torch-glow 2.7s ease-in-out infinite;
+}
+
+.torch-pixel,
+.heart-spark {
+  width: 7px;
+  height: 7px;
+  position: absolute;
+  z-index: 1;
+  display: block;
+  background: #ffe38a;
+  box-shadow: 2px 2px 0 rgba(92, 51, 10, 0.34);
+}
+
+.torch-pixel--one { top: 28px; left: 28%; animation: torch-spark 1.8s ease-in-out infinite; }
+.torch-pixel--two { top: 42px; right: 24%; animation: torch-spark 2.2s 380ms ease-in-out infinite; }
+.torch-pixel--three { right: 34%; bottom: 28px; animation: torch-spark 1.9s 780ms ease-in-out infinite; }
+
+.build-card-media--heart {
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255, 156, 173, 0.36), transparent 35%),
+    linear-gradient(135deg, #4c2434, #291b28 72%);
+}
+
+.build-card-media--heart::after {
+  position: absolute;
+  z-index: -1;
+  inset: 12px;
+  border: 1px dashed rgba(255, 226, 193, 0.25);
+  content: "";
+}
+
+.build-card-media--heart img {
+  width: 138px;
+  height: 138px;
+  position: relative;
+  z-index: 2;
+  display: block;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 8px 0 rgba(24, 10, 16, 0.48));
+  animation: heart-beat 3.2s ease-in-out infinite;
+}
+
+.heart-spark {
+  background: #ffd5de;
+  box-shadow: 2px 2px 0 rgba(134, 52, 80, 0.38);
+  animation: heart-spark 2.5s ease-in-out infinite;
+}
+
+.heart-spark--one { top: 26px; left: 24%; }
+.heart-spark--two { top: 38px; right: 20%; animation-delay: 420ms; }
+.heart-spark--three { bottom: 26px; left: 31%; animation-delay: 780ms; }
+.heart-spark--four { right: 30%; bottom: 28px; animation-delay: 1.15s; }
+
+.build-card-copy {
+  min-height: 164px;
+  padding: 20px 20px 22px;
+}
+
+.build-step {
+  margin: 0;
+  color: #ad6b64;
+  font-family: "Courier New", monospace;
+  font-size: 0.71rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.build-card h3 {
+  margin: 10px 0 8px;
+  color: #33251d;
+  font-size: 1.32rem;
+}
+
+.build-card-copy > p:last-child {
+  margin: 0;
+  color: #6d5a4b;
+  line-height: 1.55;
+}
+
+.build-card--base {
+  border-color: rgba(174, 109, 115, 0.34);
+}
+
+.build-card--light {
+  border-color: rgba(205, 152, 68, 0.38);
+}
+
+.build-card--heart {
+  border-color: rgba(213, 93, 120, 0.38);
+}
+
+.build-journey.is-enhanced .build-card {
+  opacity: 0;
+  transform: translateY(22px);
+}
+
+.build-journey.is-enhanced .build-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: calc(var(--build-order, 0) * 100ms);
+}
+
+@media (hover: hover) {
+  .build-card:hover {
+    box-shadow: 0 20px 36px rgba(68, 51, 30, 0.18);
+    transform: translateY(-5px);
+  }
+
+  .build-card--base:hover { border-color: rgba(183, 81, 101, 0.68); }
+  .build-card--light:hover { border-color: rgba(229, 178, 77, 0.78); }
+  .build-card--heart:hover { border-color: rgba(229, 111, 142, 0.76); }
+}
+
+.build-card:active {
+  transform: translateY(1px) scale(0.995);
+}
+
+.brand-mark {
+  width: 28px;
+  height: 27px;
+  position: relative;
+  flex: 0 0 28px;
+  display: inline-block;
+  background: transparent;
+  box-shadow: none;
+  filter: drop-shadow(3px 4px 0 rgba(0, 0, 0, 0.25));
+  image-rendering: pixelated;
+}
+
+.brand-cube-top,
+.brand-cube-front,
+.brand-cube-side {
+  position: absolute;
+  display: block;
+  background-image: url("assets/construido/pasto-tierra.png");
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+}
+
+.brand-cube-top {
+  z-index: 3;
+  top: 0;
+  left: 1px;
+  width: 26px;
+  height: 14px;
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  background-position: 50% 0;
+  background-size: 158% auto;
+}
+
+.brand-cube-front {
+  z-index: 1;
+  top: 7px;
+  left: 1px;
+  width: 13px;
+  height: 20px;
+  clip-path: polygon(0 0, 100% 35%, 100% 100%, 0 62%);
+  background-image:
+    linear-gradient(#65ad50 0 16%, transparent 16%),
+    url("assets/construido/pasto-tierra.png");
+  background-position: center, 50% 100%;
+  background-size: 100% 100%, 230% auto;
+}
+
+.brand-cube-side {
+  z-index: 2;
+  top: 7px;
+  right: 1px;
+  width: 13px;
+  height: 20px;
+  clip-path: polygon(0 35%, 100% 0, 100% 62%, 0 100%);
+  background-image:
+    linear-gradient(rgba(44, 92, 41, 0.22), rgba(44, 92, 41, 0.22)),
+    linear-gradient(#5b9f49 0 16%, transparent 16%),
+    url("assets/construido/pasto-tierra.png");
+  background-position: center, center, 50% 100%;
+  background-size: 100% 100%, 100% 100%, 230% auto;
+}
+
+@keyframes torch-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes torch-glow {
+  0%, 100% { opacity: 0.74; transform: scale(0.88); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+@keyframes torch-spark {
+  0%, 100% { opacity: 0.12; transform: translateY(5px) scale(0.7); }
+  45% { opacity: 1; transform: translateY(-7px) scale(1); }
+}
+
+@keyframes heart-beat {
+  0%, 80%, 100% { transform: scale(1); }
+  88% { transform: scale(1.06); }
+  94% { transform: scale(0.98); }
+}
+
+@keyframes heart-spark {
+  0%, 100% { opacity: 0.18; transform: translateY(7px) scale(0.7); }
+  45% { opacity: 1; transform: translateY(-9px) scale(1); }
+}
+
+@media (max-width: 980px) {
+  .build-heading-row {
+    display: grid;
+    gap: 10px;
+  }
+
+  .build-map-label {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .build-section {
+    padding-bottom: 50px;
+  }
+
+  .build-heading-row {
+    margin-bottom: 22px;
+  }
+
+  .build-heading > p:last-child {
+    margin-top: 10px;
+  }
+
+  .build-map-label {
+    font-size: 0.68rem;
+  }
+
+  .build-journey {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .build-path {
+    top: 76px;
+    bottom: 76px;
+    left: 19px;
+    width: 10px;
+    height: auto;
+    display: block;
+  }
+
+  .build-path::before {
+    top: 0;
+    bottom: 0;
+    left: 3px;
+    width: 4px;
+    height: auto;
+    background: repeating-linear-gradient(180deg, #9f764e 0 8px, #70aa55 8px 16px);
+  }
+
+  .build-path span {
+    display: none;
+  }
+
+  .build-card-media--light,
+  .build-card-media--heart {
+    min-height: 158px;
+  }
+
+  .build-card-copy {
+    min-height: 0;
+    padding: 18px 18px 20px;
+  }
+
+  .build-card h3 {
+    font-size: 1.24rem;
+  }
+
+  .brand-mark {
+    width: 23px;
+    height: 23px;
+    flex-basis: 23px;
+    filter: drop-shadow(2px 3px 0 rgba(0, 0, 0, 0.25));
+  }
+
+  .brand-cube-top {
+    width: 22px;
+    height: 12px;
+  }
+
+  .brand-cube-front,
+  .brand-cube-side {
+    top: 6px;
+    width: 11px;
+    height: 17px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .build-card,
+  .build-card *,
+  .build-card *::before,
+  .build-card *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}

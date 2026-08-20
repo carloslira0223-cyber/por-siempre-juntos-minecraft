@@ -47,6 +47,8 @@ const inventoryClose = document.querySelector("#inventoryClose");
 const inventoryScrim = document.querySelector("#inventoryScrim");
 const topbar = document.querySelector(".topbar");
 const navSectionLinks = Array.from(document.querySelectorAll("[data-nav-link]"));
+const buildJourney = document.querySelector("[data-build-journey]");
+const buildCards = Array.from(document.querySelectorAll("[data-build-card]"));
 const introExperience = document.querySelector("#introExperience");
 const introBookTrigger = document.querySelector("#introBookTrigger");
 const introSlides = Array.from(document.querySelectorAll("[data-intro-slide]"));
@@ -340,6 +342,38 @@ function initializeNavigation() {
   window.addEventListener("scroll", syncNavigation, { passive: true });
   window.addEventListener("resize", syncNavigation);
   syncNavigation();
+}
+
+function initializeBuildJourney() {
+  if (!buildJourney || buildCards.length === 0) {
+    return;
+  }
+
+  buildCards.forEach((card, index) => {
+    card.style.setProperty("--build-order", String(index));
+  });
+
+  if (!("IntersectionObserver" in window)) {
+    buildCards.forEach((card) => card.classList.add("is-visible"));
+    return;
+  }
+
+  buildJourney.classList.add("is-enhanced");
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.18, rootMargin: "0px 0px -6% 0px" }
+  );
+
+  buildCards.forEach((card) => observer.observe(card));
 }
 
 function playSoundEffect(sound, volume) {
@@ -1827,6 +1861,7 @@ initializeInventory();
 initializeInventoryDrawer();
 initializeGarden();
 initializeNavigation();
+initializeBuildJourney();
 initializeAudio();
 initializeIntro();
 initializeNether();

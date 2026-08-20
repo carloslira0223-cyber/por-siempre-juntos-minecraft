@@ -3765,3 +3765,776 @@ a:focus-visible {
     height: 60px;
   }
 }
+
+/* Nether refinement: portal sequence, persistent expedition inventory and mining wall. */
+button,
+.game-item,
+.drop-slot,
+.inventory-slot,
+.nether-portal-button,
+.nether-ore,
+.nether-gold-pickup,
+.nether-reward-dismiss {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.inventory-nether-pickaxe-slot img,
+.inventory-nether-gold-slot img {
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.inventory-nether-pickaxe-slot img {
+  transform: rotate(-18deg) scale(0.86);
+}
+
+.nether-section {
+  min-height: 840px;
+  background-position: center;
+}
+
+.nether-transition {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  background: rgba(76, 21, 119, 0.06);
+  transition: opacity 260ms ease;
+}
+
+.nether-transition span {
+  width: 18%;
+  height: 140%;
+  position: absolute;
+  top: -20%;
+  background: rgba(161, 75, 241, 0.14);
+  filter: blur(1px);
+  transform: skewX(-15deg) translateX(-160%);
+}
+
+.nether-transition span:nth-child(1) { left: 4%; animation-delay: 0ms; }
+.nether-transition span:nth-child(2) { left: 29%; animation-delay: 90ms; }
+.nether-transition span:nth-child(3) { left: 54%; animation-delay: 180ms; }
+.nether-transition span:nth-child(4) { left: 79%; animation-delay: 270ms; }
+
+.nether-section.is-activating .nether-transition {
+  opacity: 1;
+}
+
+.nether-section.is-activating .nether-transition span {
+  animation: nether-crossing 1.36s ease-out both;
+}
+
+.nether-gate {
+  grid-template-columns: minmax(268px, 0.84fr) minmax(0, 1fr);
+}
+
+.nether-portal-button {
+  min-height: 320px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  border: 0;
+  padding: 12px;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.nether-portal-button:hover .nether-portal-art,
+.nether-portal-button:focus-visible .nether-portal-art {
+  transform: translateY(-4px) scale(1.018);
+}
+
+.nether-portal-wrap {
+  width: min(100%, 302px);
+  min-height: 290px;
+}
+
+.nether-portal-action {
+  min-width: 142px;
+  position: absolute;
+  z-index: 3;
+  bottom: 8px;
+  display: block;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 221, 180, 0.44);
+  color: #fff1d8;
+  background: rgba(35, 5, 14, 0.76);
+  box-shadow: 3px 3px 0 rgba(24, 2, 9, 0.42);
+  font-family: "Courier New", monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.nether-portal-key {
+  width: 48px;
+  height: 48px;
+  position: absolute;
+  z-index: 4;
+  top: 42%;
+  right: -4px;
+  display: block;
+  object-fit: contain;
+  opacity: 0;
+  transform: translate(30px, -16px) rotate(-22deg) scale(0.72);
+  transition: opacity 220ms ease, transform 420ms ease;
+}
+
+.nether-gate.has-key:not(.is-open) .nether-portal-key {
+  opacity: 0.9;
+  transform: translate(0, 0) rotate(-12deg) scale(0.88);
+}
+
+.nether-gate.is-activating .nether-portal-key {
+  opacity: 1;
+  animation: nether-key-turn 1.16s ease-in both;
+}
+
+.nether-portal-lock {
+  width: 32px;
+  height: 30px;
+  position: absolute;
+  z-index: 4;
+  top: 46%;
+  left: 50%;
+  border: 3px solid #d7c6c2;
+  background: #5a3739;
+  box-shadow: inset 0 0 0 3px #302026, 3px 3px 0 rgba(20, 1, 8, 0.48);
+  opacity: 0.84;
+  transform: translate(-50%, -50%);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.nether-portal-lock::before {
+  width: 16px;
+  height: 13px;
+  position: absolute;
+  top: -15px;
+  left: 5px;
+  border: 3px solid #d7c6c2;
+  border-bottom: 0;
+  content: "";
+}
+
+.nether-gate.has-key .nether-portal-lock {
+  opacity: 0.48;
+}
+
+.nether-gate.is-activating .nether-portal-lock,
+.nether-gate.is-open .nether-portal-lock {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.72);
+}
+
+.nether-portal-spark {
+  width: 6px;
+  height: 6px;
+  position: absolute;
+  z-index: 3;
+  display: block;
+  opacity: 0;
+  background: #d98cff;
+  box-shadow: 2px 2px 0 rgba(84, 23, 137, 0.86);
+}
+
+.nether-portal-spark-one { top: 25%; left: 28%; }
+.nether-portal-spark-two { top: 58%; right: 24%; width: 8px; height: 8px; }
+.nether-portal-spark-three { bottom: 24%; left: 40%; width: 4px; height: 4px; }
+
+.nether-gate.is-activating .nether-portal-spark,
+.nether-gate.is-open .nether-portal-spark {
+  animation: nether-portal-spark 1.9s ease-in-out infinite;
+}
+
+.nether-gate.is-activating .nether-portal-spark-two,
+.nether-gate.is-open .nether-portal-spark-two { animation-delay: -0.7s; }
+.nether-gate.is-activating .nether-portal-spark-three,
+.nether-gate.is-open .nether-portal-spark-three { animation-delay: -1.2s; }
+
+.nether-gate.is-hinting .nether-portal-art,
+.nether-gate.is-activating .nether-portal-art {
+  animation: nether-gate-shake 440ms ease-in-out both;
+}
+
+.nether-gate.is-activating .nether-portal-glow {
+  animation: nether-portal-awaken 1.32s ease-out both;
+}
+
+.nether-gate.is-open .nether-portal-glow {
+  opacity: 1;
+  background: rgba(130, 51, 213, 0.68);
+}
+
+.nether-enter-button.is-disabled {
+  cursor: pointer;
+  border-color: rgba(202, 176, 191, 0.38);
+  color: rgba(255, 241, 227, 0.66);
+  background: rgba(51, 31, 43, 0.84);
+}
+
+.nether-enter-button.is-disabled:hover,
+.nether-enter-button.is-disabled:focus-visible {
+  border-color: rgba(255, 216, 154, 0.64);
+  background: rgba(79, 37, 55, 0.94);
+  transform: translateY(-2px);
+}
+
+.nether-arrival {
+  max-width: 620px;
+  margin: 26px auto 0;
+  padding: clamp(28px, 5vw, 56px);
+  border: 1px solid rgba(221, 152, 255, 0.52);
+  color: #fff4e2;
+  background: rgba(48, 7, 60, 0.86);
+  box-shadow: 0 22px 54px rgba(22, 0, 31, 0.46);
+  text-align: center;
+  animation: nether-arrival-in 440ms ease-out both;
+}
+
+.nether-arrival[hidden] {
+  display: none;
+}
+
+.nether-arrival h3 {
+  margin: 12px 0 10px;
+  font-family: "Courier New", monospace;
+  font-size: clamp(1.7rem, 4vw, 2.55rem);
+}
+
+.nether-arrival p:last-child {
+  margin: 0;
+  color: rgba(255, 237, 215, 0.8);
+}
+
+.nether-mine {
+  position: relative;
+}
+
+.nether-mine-layout {
+  grid-template-columns: minmax(132px, 154px) minmax(0, 1fr);
+  align-items: start;
+}
+
+.nether-quick-inventory {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 22px;
+  padding: 10px;
+  border: 1px solid rgba(255, 205, 132, 0.32);
+  background: rgba(32, 4, 7, 0.46);
+}
+
+.nether-quick-inventory p {
+  margin: 0 8px 0 0;
+  color: rgba(255, 233, 199, 0.76);
+  font-family: "Courier New", monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.nether-quick-slot {
+  width: 42px;
+  height: 42px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 232, 200, 0.22);
+  background: rgba(13, 2, 5, 0.52);
+  opacity: 0.32;
+  filter: grayscale(1);
+  transition: opacity 180ms ease, filter 180ms ease, transform 180ms ease;
+}
+
+.nether-quick-slot img {
+  width: 32px;
+  height: 32px;
+  display: block;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.nether-quick-slot.is-collected {
+  opacity: 1;
+  filter: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 212, 126, 0.26);
+}
+
+.nether-quick-slot.is-collected:not(.is-used) {
+  animation: nether-item-ready 560ms ease-out both;
+}
+
+.nether-quick-slot.is-used {
+  opacity: 0.5;
+  filter: grayscale(0.25);
+}
+
+.nether-pickaxe {
+  min-height: 148px;
+  position: sticky;
+  top: 90px;
+  overflow: hidden;
+}
+
+.nether-pickaxe:not(.is-collected) {
+  animation: nether-pickaxe-call 1.8s ease-in-out infinite;
+}
+
+.nether-pickaxe.is-collected img {
+  transform: rotate(-16deg) translateY(-2px);
+}
+
+.nether-ore-field {
+  width: min(100%, 610px);
+  grid-template-columns: repeat(5, minmax(58px, 1fr));
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid rgba(255, 202, 110, 0.22);
+  background: rgba(17, 2, 4, 0.38);
+}
+
+.nether-ore {
+  min-height: 64px;
+  overflow: hidden;
+  border: 2px solid rgba(44, 5, 7, 0.94);
+  background: #5d201d url("assets/nether/netherrack.webp") center / cover no-repeat;
+  box-shadow: inset 0 0 0 1px rgba(255, 204, 156, 0.08), 4px 4px 0 rgba(22, 2, 4, 0.44);
+  cursor: pointer;
+  transform: none;
+}
+
+.nether-ore:nth-child(3n) { transform: translateY(5px); }
+.nether-ore:nth-child(5n) { transform: translateY(-4px); }
+
+.nether-mine.has-pickaxe .nether-ore:not(:disabled):hover,
+.nether-mine.has-pickaxe .nether-ore:not(:disabled):focus-visible {
+  border-color: #ffdfa3;
+  box-shadow: inset 0 0 0 2px rgba(255, 238, 183, 0.34), 4px 4px 0 rgba(22, 2, 4, 0.44);
+  cursor: crosshair;
+}
+
+.nether-ore::before {
+  width: 54px;
+  height: 54px;
+  position: absolute;
+  z-index: 3;
+  right: -19px;
+  bottom: -14px;
+  content: "";
+  pointer-events: none;
+  opacity: 0;
+  background: url("assets/nether/stone-pickaxe.webp") center / contain no-repeat;
+  transform: rotate(18deg) scale(0.72);
+}
+
+.nether-ore::after {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0;
+  background:
+    linear-gradient(128deg, transparent 43%, rgba(23, 3, 4, 0.76) 44%, rgba(23, 3, 4, 0.76) 47%, transparent 48%),
+    linear-gradient(47deg, transparent 56%, rgba(23, 3, 4, 0.72) 57%, rgba(23, 3, 4, 0.72) 60%, transparent 61%),
+    linear-gradient(155deg, transparent 35%, rgba(23, 3, 4, 0.64) 36%, rgba(23, 3, 4, 0.64) 38%, transparent 39%);
+  transition: opacity 160ms ease;
+}
+
+.nether-ore.is-cracked::after {
+  opacity: 1;
+}
+
+.nether-ore.is-struck::before {
+  animation: nether-pickaxe-swing 330ms ease-out both;
+}
+
+.nether-ore.is-struck {
+  animation: nether-block-hit 220ms ease-out both;
+}
+
+.nether-ore.is-broken {
+  pointer-events: none;
+  opacity: 0.12;
+  filter: saturate(0.2);
+  transform: scale(0.56) rotate(-8deg);
+}
+
+.nether-ore.is-gold-revealed {
+  opacity: 1;
+  filter: none;
+  background-image: url("assets/nether/nether-gold-ore.webp");
+  box-shadow: inset 0 0 0 2px rgba(255, 240, 137, 0.54), 0 0 20px rgba(255, 184, 47, 0.56);
+  transform: scale(1.02);
+  animation: nether-gold-pulse 1.05s ease-in-out infinite;
+}
+
+.nether-ore.is-gold-revealed::after {
+  opacity: 0;
+}
+
+.nether-ore.is-finished:not(.is-gold-revealed) {
+  opacity: 0.1;
+}
+
+.nether-mining-particles {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  pointer-events: none;
+}
+
+.nether-mining-particles span {
+  width: 6px;
+  height: 6px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: #b45c42;
+  box-shadow: 2px 2px 0 rgba(52, 9, 8, 0.62);
+  animation: nether-block-fragment 520ms ease-out both;
+}
+
+.nether-mining-particles.is-gold span {
+  background: #ffd451;
+  box-shadow: 2px 2px 0 #b76a17;
+}
+
+.nether-mining-particles span:nth-child(2) { animation-delay: 25ms; }
+.nether-mining-particles span:nth-child(3) { animation-delay: 55ms; }
+.nether-mining-particles span:nth-child(4) { animation-delay: 80ms; }
+.nether-mining-particles span:nth-child(5) { animation-delay: 105ms; }
+
+.nether-gold-discovery {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+  max-width: 570px;
+  margin: 28px 0 0;
+  padding: 18px;
+  border: 1px solid rgba(255, 213, 83, 0.58);
+  background: rgba(94, 42, 7, 0.68);
+  box-shadow: 0 0 28px rgba(255, 171, 43, 0.2);
+  animation: nether-arrival-in 360ms ease-out both;
+}
+
+.nether-gold-discovery[hidden] {
+  display: none;
+}
+
+.nether-gold-discovery > img {
+  width: 86px;
+  height: 86px;
+  display: block;
+  object-fit: contain;
+  image-rendering: pixelated;
+  animation: nether-gold-pulse 1.1s ease-in-out infinite;
+}
+
+.nether-gold-discovery strong {
+  display: block;
+  color: #fff1ac;
+  font-family: "Courier New", monospace;
+  font-size: 1.08rem;
+}
+
+.nether-gold-discovery p {
+  margin: 6px 0 12px;
+  color: rgba(255, 244, 209, 0.86);
+}
+
+.nether-gold-pickup,
+.nether-reward-dismiss {
+  min-height: 44px;
+  border: 1px solid #ffe085;
+  padding: 8px 12px;
+  color: #392307;
+  background: #f7be4a;
+  box-shadow: inset 0 0 0 2px rgba(255, 248, 199, 0.42), 3px 3px 0 rgba(75, 20, 6, 0.34);
+  cursor: pointer;
+  font-family: "Courier New", monospace;
+  font-weight: 700;
+  transition: transform 140ms ease, filter 140ms ease;
+}
+
+.nether-gold-pickup:hover,
+.nether-gold-pickup:focus-visible,
+.nether-reward-dismiss:hover,
+.nether-reward-dismiss:focus-visible {
+  filter: brightness(1.06);
+  transform: translateY(-2px);
+}
+
+.nether-gold-discovery.is-collected {
+  animation: nether-item-collected 520ms ease-in both;
+}
+
+.nether-book-reward {
+  max-width: 570px;
+}
+
+.nether-reward-overlay {
+  position: absolute;
+  z-index: 8;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  min-height: 100%;
+  padding: 32px 18px;
+  background: rgba(25, 2, 34, 0.8);
+  backdrop-filter: blur(3px);
+}
+
+.nether-reward-overlay[hidden] {
+  display: none;
+}
+
+.nether-reward-card {
+  width: min(100%, 390px);
+  position: relative;
+  overflow: hidden;
+  padding: 32px 28px 26px;
+  border: 1px solid rgba(241, 184, 255, 0.72);
+  color: #fff3e4;
+  background: #3c1552 url("assets/nether/netherrack.webp") center / 220px;
+  box-shadow: 0 28px 70px rgba(16, 1, 24, 0.7), inset 0 0 0 2px rgba(255, 227, 255, 0.1);
+  text-align: center;
+  animation: nether-reward-card-in 520ms cubic-bezier(0.2, 0.86, 0.32, 1.18) both;
+}
+
+.nether-reward-card > img {
+  width: 110px;
+  height: 110px;
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin: 0 auto 14px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 14px rgba(255, 193, 238, 0.6));
+  transform: rotate(-5deg);
+}
+
+.nether-reward-card h3 {
+  position: relative;
+  z-index: 1;
+  margin: 8px 0;
+  font-family: "Courier New", monospace;
+  font-size: 1.38rem;
+}
+
+.nether-reward-card p:not(.mission-label) {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 20px;
+  color: rgba(255, 239, 247, 0.88);
+}
+
+.nether-reward-dismiss {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.nether-reward-particle {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  background: #f4bbff;
+  box-shadow: 2px 2px 0 rgba(104, 33, 141, 0.84);
+  animation: nether-reward-spark 2.2s ease-in-out infinite;
+}
+
+.nether-reward-particle-one { top: 22%; left: 14%; }
+.nether-reward-particle-two { right: 16%; bottom: 30%; width: 6px; height: 6px; animation-delay: -1.1s; }
+
+@keyframes nether-crossing {
+  from { transform: skewX(-15deg) translateX(-160%); opacity: 0; }
+  24% { opacity: 1; }
+  to { transform: skewX(-15deg) translateX(830%); opacity: 0; }
+}
+
+@keyframes nether-key-turn {
+  0% { transform: translate(0, 0) rotate(-12deg) scale(0.88); }
+  52% { transform: translate(-88px, 2px) rotate(38deg) scale(1); }
+  100% { transform: translate(-88px, 2px) rotate(38deg) scale(0.66); opacity: 0; }
+}
+
+@keyframes nether-gate-shake {
+  0%, 100% { transform: translateY(0) saturate(1); }
+  25% { transform: translateX(-5px) rotate(-1deg) saturate(1.14); }
+  55% { transform: translateX(5px) rotate(1deg) saturate(1.14); }
+  78% { transform: translateX(-2px); }
+}
+
+@keyframes nether-portal-awaken {
+  0% { opacity: 0.44; transform: translateY(4px) scale(0.74); }
+  54% { opacity: 1; transform: translateY(4px) scale(1.22); }
+  100% { opacity: 1; transform: translateY(4px) scale(1); }
+}
+
+@keyframes nether-portal-spark {
+  0%, 100% { opacity: 0; transform: translateY(12px) scale(0.7); }
+  50% { opacity: 1; transform: translateY(-22px) scale(1); }
+}
+
+@keyframes nether-arrival-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes nether-item-ready {
+  0% { transform: scale(0.7); }
+  62% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+@keyframes nether-pickaxe-call {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes nether-pickaxe-swing {
+  0% { opacity: 0; transform: rotate(18deg) scale(0.72) translate(18px, -26px); }
+  35% { opacity: 1; }
+  72% { opacity: 1; transform: rotate(-30deg) scale(1) translate(-10px, 7px); }
+  100% { opacity: 0; transform: rotate(-18deg) scale(0.78) translate(-2px, 0); }
+}
+
+@keyframes nether-block-hit {
+  0%, 100% { filter: none; }
+  40% { filter: brightness(1.42); }
+}
+
+@keyframes nether-block-fragment {
+  from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  to { opacity: 0; transform: translate(calc(-50% + var(--particle-x)), calc(-50% + var(--particle-y))) scale(0.4); }
+}
+
+@keyframes nether-gold-pulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.34); }
+}
+
+@keyframes nether-item-collected {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  72% { opacity: 1; transform: translateY(-22px) scale(0.78); }
+  100% { opacity: 0; transform: translateY(-52px) scale(0.28); }
+}
+
+@keyframes nether-reward-card-in {
+  from { opacity: 0; transform: scale(0.72); }
+  72% { opacity: 1; transform: scale(1.04); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes nether-reward-spark {
+  0%, 100% { opacity: 0.2; transform: translateY(10px) scale(0.7); }
+  50% { opacity: 1; transform: translateY(-14px) scale(1); }
+}
+
+@media (max-width: 700px) {
+  .nether-section {
+    min-height: 0;
+    background-position: 58% center;
+  }
+
+  .nether-gate {
+    grid-template-columns: 1fr;
+  }
+
+  .nether-portal-button {
+    min-height: 278px;
+    order: 0;
+  }
+
+  .nether-portal-wrap {
+    width: min(68vw, 250px);
+    min-height: 246px;
+  }
+
+  .nether-portal-action {
+    bottom: 2px;
+  }
+
+  .nether-portal-key {
+    right: -18px;
+  }
+
+  .nether-arrival {
+    margin-top: 18px;
+  }
+
+  .nether-mine-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .nether-quick-inventory {
+    gap: 5px;
+    padding: 8px;
+  }
+
+  .nether-quick-inventory p {
+    display: none;
+  }
+
+  .nether-quick-slot {
+    width: 44px;
+    height: 44px;
+  }
+
+  .nether-pickaxe {
+    min-height: 96px;
+    position: relative;
+    top: auto;
+  }
+
+  .nether-ore-field {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .nether-ore {
+    min-height: 76px;
+  }
+
+  .nether-ore:nth-child(3n) { transform: translateY(3px); }
+  .nether-ore:nth-child(5n) { transform: translateY(-2px); }
+
+  .nether-gold-discovery {
+    grid-template-columns: 74px minmax(0, 1fr);
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .nether-gold-discovery > img {
+    width: 68px;
+    height: 68px;
+  }
+
+  .nether-reward-overlay {
+    padding: 20px 12px;
+  }
+
+  .nether-reward-card {
+    padding: 28px 22px 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nether-section *,
+  .nether-section *::before,
+  .nether-section *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+}

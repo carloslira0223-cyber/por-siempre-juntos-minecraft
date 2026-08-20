@@ -81,7 +81,6 @@ const netherGoldPickup = document.querySelector("#netherGoldPickup");
 const netherBookReward = document.querySelector("#netherBookReward");
 const netherRewardOverlay = document.querySelector("#netherRewardOverlay");
 const netherRewardDismiss = document.querySelector("#netherRewardDismiss");
-const netherMineReset = document.querySelector("#netherMineReset");
 const relationshipStart = new Date(2025, 1, 20, 20, 0, 0);
 const NETHER_PROGRESS_STORAGE_KEY = "por-siempre-juntos-nether-progress-v2";
 const NETHER_BLOCK_TOTAL = 15;
@@ -143,7 +142,6 @@ let netherProgress = loadNetherProgress();
 let netherKeyReady = netherProgress.creeperKeyObtained;
 let netherUnlocked = netherProgress.netherUnlocked;
 let netherPickaxeSelected = false;
-let minedNetherOreCount = netherProgress.netherGoldFound ? 1 : 0;
 let netherPortalTimer = null;
 let netherArrivalTimer = null;
 
@@ -539,7 +537,6 @@ function updateNetherQuickInventory() {
 function restoreNetherProgress() {
   netherKeyReady = Boolean(netherProgress.creeperKeyObtained);
   netherUnlocked = Boolean(netherProgress.netherUnlocked);
-  minedNetherOreCount = netherProgress.netherGoldFound ? 1 : 0;
 
   if (netherProgress.creeperKeyObtained) {
     unlockInventoryItem("shared-key");
@@ -828,7 +825,6 @@ function collectNetherGold() {
 
   netherProgress.netherGoldFound = true;
   netherProgress.netherBookUnlocked = true;
-  minedNetherOreCount = 1;
   netherPickaxeSelected = false;
   saveNetherProgress();
   unlockInventoryItem("nether-gold");
@@ -1040,9 +1036,6 @@ function initializeNether() {
     });
   }
 
-  if (netherMineReset) {
-    netherMineReset.hidden = true;
-  }
 }
 
 let introSlideIndex = 0;

@@ -8,7 +8,7 @@
       name="description"
       content="Una p&aacute;gina de aniversario inspirada en mundos de cubitos, hecha con amor."
     />
-    <link rel="stylesheet" href="styles.css?v=20260819-nether" />
+    <link rel="stylesheet" href="styles.css?v=20260819-nether-adventure" />
   </head>
   <body class="intro-active">
     <section
@@ -294,6 +294,28 @@
             aria-label="Libro del Nether bloqueado"
           >
             <img src="assets/nether/nether-reward-book.webp" alt="" />
+            <span class="inventory-count" aria-hidden="true">1</span>
+            <span class="inventory-lock" aria-hidden="true"></span>
+          </button>
+          <button
+            class="inventory-slot inventory-nether-pickaxe-slot"
+            type="button"
+            disabled
+            data-inventory-item="nether-pickaxe"
+            aria-label="Pico del Nether bloqueado"
+          >
+            <img src="assets/nether/stone-pickaxe.webp" alt="" />
+            <span class="inventory-count" aria-hidden="true">1</span>
+            <span class="inventory-lock" aria-hidden="true"></span>
+          </button>
+          <button
+            class="inventory-slot inventory-nether-gold-slot"
+            type="button"
+            disabled
+            data-inventory-item="nether-gold"
+            aria-label="Oro del Nether bloqueado"
+          >
+            <img src="assets/nether/nether-gold-ore.webp" alt="" />
             <span class="inventory-count" aria-hidden="true">1</span>
             <span class="inventory-lock" aria-hidden="true"></span>
           </button>
@@ -653,64 +675,101 @@
 
       <section class="nether-section is-locked" id="nether" aria-labelledby="nether-title" data-nether-section>
         <div class="nether-particle-layer" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        <div class="nether-transition" id="netherTransition" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
         <div class="nether-shell">
           <div class="nether-heading">
-            <p class="eyebrow nether-eyebrow">Misi&oacute;n sellada</p>
+            <p class="eyebrow nether-eyebrow">Cap&iacute;tulo sellado</p>
             <h2 id="nether-title">El Nether nos espera del otro lado</h2>
-            <p>El portal solo responde a la llave que solt&oacute; el creeper. Cuando la tengamos, podremos cruzar juntos.</p>
+            <p>Hay aventuras que solo se abren cuando las dos personas tienen la llave correcta.</p>
           </div>
 
           <div class="nether-gate" id="netherGate">
-            <div class="nether-portal-wrap" aria-hidden="true">
-              <img class="nether-portal-art" src="assets/nether/nether-portal.webp" alt="" />
-              <span class="nether-portal-glow"></span>
-            </div>
+            <button class="nether-portal-button" id="netherPortalButton" type="button" aria-describedby="netherGateStatus" aria-label="Portal del Nether bloqueado">
+              <span class="nether-portal-wrap" aria-hidden="true">
+                <img class="nether-portal-art" src="assets/nether/nether-portal.webp" alt="" />
+                <span class="nether-portal-glow"></span>
+                <img class="nether-portal-key" src="assets/escape-key.png" alt="" />
+                <span class="nether-portal-lock"></span>
+                <span class="nether-portal-spark nether-portal-spark-one"></span>
+                <span class="nether-portal-spark nether-portal-spark-two"></span>
+                <span class="nether-portal-spark nether-portal-spark-three"></span>
+              </span>
+              <span class="nether-portal-action" id="netherPortalAction">Portal bloqueado</span>
+            </button>
             <div class="nether-gate-copy">
-              <p class="mission-label">Acceso al portal</p>
-              <h3>Una llave, una nueva aventura</h3>
-              <p id="netherGateStatus" aria-live="polite">Completa la misi&oacute;n del creeper para conseguir la llave de los dos.</p>
-              <button class="nether-enter-button" id="netherEnter" type="button" disabled>
+              <p class="mission-label" id="netherAccessLabel">Portal sellado</p>
+              <h3 id="netherGateTitle">Una pista entre las brasas</h3>
+              <p id="netherGateStatus" aria-live="polite">Parece que algo falta&hellip; tal vez cierto Creeper tenga la respuesta.</p>
+              <button class="nether-enter-button" id="netherEnter" type="button" aria-describedby="netherGateStatus">
                 <img src="assets/escape-key.png" alt="" aria-hidden="true" />
-                <span>Usar la llave</span>
+                <span id="netherEnterText">Intentar entrar</span>
               </button>
             </div>
           </div>
+
+          <article class="nether-arrival" id="netherArrival" hidden aria-live="polite">
+            <p class="mission-label">Nueva misi&oacute;n</p>
+            <h3>El oro del Nether</h3>
+            <p>Parece que necesitamos encontrar algo&hellip;</p>
+          </article>
 
           <article class="nether-mine" id="netherMine" hidden aria-labelledby="nether-mine-title">
             <div class="nether-mine-heading">
               <div>
                 <p class="mission-label">Misi&oacute;n 03</p>
-                <h3 id="nether-mine-title">Oro entre el fuego</h3>
+                <h3 id="nether-mine-title">Busca el oro entre las brasas</h3>
               </div>
-              <button class="restart-button" id="netherMineReset" type="button">Reiniciar mina</button>
+              <p class="nether-ledger">Veta explorada <strong><span id="netherOreCount">0</span> / 1</strong></p>
             </div>
-            <p class="nether-copy">Toma el pico y extrae los cinco bloques de oro que brillan en la roca del Nether.</p>
+            <p class="nether-copy">Encuentra el pico, t&oacute;malo y rompe la roca con paciencia. Hay algo brillando para mi minerita favorita.</p>
+
+            <div class="nether-quick-inventory" aria-label="Inventario de expedici&oacute;n del Nether">
+              <p>Inventario de expedici&oacute;n</p>
+              <span class="nether-quick-slot" data-nether-quick-item="key" title="Llave de los dos"><img src="assets/escape-key.png" alt="Llave de los dos" /></span>
+              <span class="nether-quick-slot" data-nether-quick-item="pickaxe" title="Pico pendiente"><img src="assets/nether/stone-pickaxe.webp" alt="Pico" /></span>
+              <span class="nether-quick-slot" data-nether-quick-item="gold" title="Oro pendiente"><img src="assets/nether/nether-gold-ore.webp" alt="Oro del Nether" /></span>
+              <span class="nether-quick-slot" data-nether-quick-item="book" title="Libro pendiente"><img src="assets/nether/nether-reward-book.webp" alt="Libro del Nether" /></span>
+            </div>
 
             <div class="nether-mine-layout">
               <button class="nether-pickaxe" id="netherPickaxe" type="button" aria-pressed="false">
                 <img src="assets/nether/stone-pickaxe.webp" alt="" />
-                <span>Tomar pico</span>
+                <span id="netherPickaxeLabel">Tomar pico</span>
               </button>
-              <div class="nether-ore-field" id="netherOreField" aria-label="Bloques de oro para minar">
-                <button class="nether-ore" type="button" disabled data-nether-ore="0" aria-label="Bloque de oro del Nether 1"></button>
-                <button class="nether-ore" type="button" disabled data-nether-ore="1" aria-label="Bloque de oro del Nether 2"></button>
-                <button class="nether-ore" type="button" disabled data-nether-ore="2" aria-label="Bloque de oro del Nether 3"></button>
-                <button class="nether-ore" type="button" disabled data-nether-ore="3" aria-label="Bloque de oro del Nether 4"></button>
-                <button class="nether-ore" type="button" disabled data-nether-ore="4" aria-label="Bloque de oro del Nether 5"></button>
+              <div class="nether-ore-field" id="netherOreField" aria-label="Veta de roca para minar"></div>
+            </div>
+
+            <div class="nether-gold-discovery" id="netherGoldDiscovery" hidden>
+              <img src="assets/nether/nether-gold-ore.webp" alt="Oro encontrado en la roca" />
+              <div>
+                <strong>Lo encontraste</strong>
+                <p>Sab&iacute;a que mi minerita pod&iacute;a hacerlo.</p>
+                <button class="nether-gold-pickup" id="netherGoldPickup" type="button">Guardar el oro</button>
               </div>
-              <p class="nether-ledger">Oro extra&iacute;do <strong><span id="netherOreCount">0</span> / 5</strong></p>
             </div>
 
             <div class="nether-book-reward" id="netherBookReward" hidden>
               <img src="assets/nether/nether-reward-book.webp" alt="Libro conseguido" />
               <div>
                 <strong>Libro rescatado</strong>
-                <span>Una historia nueva ya vive en nuestro inventario.</span>
+                <span>El oro ya encontr&oacute; una nueva historia que proteger.</span>
               </div>
             </div>
-            <p class="nether-status" id="netherStatus" aria-live="polite">Primero toma el pico para empezar a minar.</p>
+            <p class="nether-status" id="netherStatus" aria-live="polite">El pico est&aacute; esper&aacute;ndote junto a la veta.</p>
           </article>
         </div>
+
+        <section class="nether-reward-overlay" id="netherRewardOverlay" hidden aria-labelledby="nether-reward-title" role="dialog" aria-modal="true">
+          <div class="nether-reward-card">
+            <span class="nether-reward-particle nether-reward-particle-one" aria-hidden="true"></span>
+            <span class="nether-reward-particle nether-reward-particle-two" aria-hidden="true"></span>
+            <img src="assets/nether/nether-reward-book.webp" alt="Libro desbloqueado" />
+            <p class="mission-label">Recompensa desbloqueada</p>
+            <h3 id="nether-reward-title">Has encontrado algo m&aacute;s&hellip;</h3>
+            <p>Un libro para la pr&oacute;xima parte de nuestra historia.</p>
+            <button class="nether-reward-dismiss" id="netherRewardDismiss" type="button">Guardar en inventario</button>
+          </div>
+        </section>
       </section>
 
       <section class="section gallery-section" id="recuerdos" aria-labelledby="gallery-title">
@@ -841,6 +900,6 @@
       </section>
     </main>
 
-    <script src="script.js?v=20260819-audio"></script>
+    <script src="script.js?v=20260819-nether-adventure"></script>
   </body>
 </html>
